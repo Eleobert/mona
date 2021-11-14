@@ -4,7 +4,8 @@
 #include <glm/gtc/matrix_integer.hpp>
 
 
-auto linspace(text_renderer& trenderer, const mona::camera& cam, glm::vec3 a, glm::vec3 b, float start, float end, int n)
+auto linspace(text_renderer& trenderer, const mona::camera& cam, glm::vec3 a, glm::vec3 b,
+              float start, float end, int n, glm::vec2 font_origin)
 {
     const auto coord_step = (b - a) / (static_cast<float>(n) - 1.f);
     const auto value_step = (end - start) / (n - 1.0);
@@ -14,7 +15,8 @@ auto linspace(text_renderer& trenderer, const mona::camera& cam, glm::vec3 a, gl
         auto p = glm::project(a, glm::mat4(1.f), cam.mvprsp(), cam.view_port);
         char buffer[50];
         sprintf(buffer, "%.3f", start);
-        trenderer.render(buffer, p.x, p.y);
+        const auto size = trenderer.size(buffer, 1);
+        trenderer.render(buffer, p, 1, {0, 0, 0}, font_origin);
 
         a += coord_step;
         start += value_step;
@@ -59,30 +61,31 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
 
     auto mvporth = cam.mvorth();
     auto mvpersp = cam.mvprsp();
-    auto drawed_bottom = draw_grid(bottom, mvporth);
-    auto drawed_up     = draw_grid(up, mvporth);
-    auto drawed_left   = draw_grid(left, mvporth);
-    auto drawed_right  = draw_grid(right, mvporth);
-    auto drawed_front  = draw_grid(front, mvporth);
-    auto drawed_back   = draw_grid(back, mvporth);
+    auto visible_bottom = draw_grid(bottom, mvporth);
+    auto visible_up     = draw_grid(up, mvporth);
+    auto visible_left   = draw_grid(left, mvporth);
+    auto visible_right  = draw_grid(right, mvporth);
+    auto visible_front  = draw_grid(front, mvporth);
+    auto visible_back   = draw_grid(back, mvporth);
 
-    auto to_int = [](bool b) -> int
+    auto num = [](bool b)
     {
-        return b? 1: -1;
+        return b? 1.f: -1.f;
     };
 
     glm::vec3 x1, x2, y1, y2, z1, z2;
+    glm::vec2 font_origin_x(0), font_origin_y(0), font_origin_z(0);
 
     x1.x = -1;
     x2.x = +1;
-    x1.z = to_int(drawed_front);
+    x1.z = num(visible_front);
     x2.z = x1.z;
-    x1.y = to_int(drawed_up);
+    x1.y = num(visible_up);
     x2.y = x1.y;
 
-    y1.x = to_int(drawed_left);
+    y1.x = num(visible_left);
     y2.x = y1.x;
-    y1.y = to_int(drawed_up);
+    y1.y = num(visible_up);
     y2.y = y1.y;
     y1.z = -1;
     y2.z = +1;
@@ -103,20 +106,20 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
     z1.y = -1;
     z2.y = +1;
 
-    const auto pad = 1;// + series_paddding + 0.01;
+    font_origin_z.x = (mvpersp * glm::vec4(z0, 1)).x < 0? 1: -1;
+    font_origin_z.y = visible_bottom? -1: 1; // avoids overlapping with x/y
+    font_origin_x.x = (visible_right && visible_front || visible_left && visible_back)? -1: 1;
+    font_origin_x.y = (visible_up)? -1: 1;
+    font_origin_y.x = -font_origin_x.x;
+    font_origin_y.y = font_origin_x.y;
 
-    // add padding
-    x1.z *= pad;
-    x2.z = x1.z;
+    auto ortho = glm::ortho(0.f, cam.view_port.z, 0.f, cam.view_port.w);
+    trenderer.s.set_uniform("projection", ortho);
 
-    y1.x *= pad;
-    y2.x = y1.x;
 
-    trenderer.s.set_uniform("projection", glm::ortho(0.0f, 570.f, 0.0f, 510.f));
-
-    linspace(trenderer, cam, x1, x2, x.x, x.y, n);
-    linspace(trenderer, cam, y1, y2, y.x, y.y, n);
-    linspace(trenderer, cam, z1, z2, z.x, z.y, n);
+    linspace(trenderer, cam, x1, x2, x.x, x.y, n, font_origin_x);
+    linspace(trenderer, cam, y1, y2, y.x, y.y, n, font_origin_y);
+    linspace(trenderer, cam, z1, z2, z.x, z.y, n, font_origin_z);
 
     t.end_frame();
 }

@@ -90,8 +90,10 @@ auto window::control_camera(mona::camera cam) -> mona::camera
     auto dist_inc = get_mouse_scroll(handle) * scroll_sens;
     dist_inc = dist_inc + cam_dist < min_dist? 0: dist_inc;
     cam.zoom(dist_inc);
+
     auto [w, h] = this->size();
     cam.view_port = {0, 0, w, h};
+
     return cam;
 }
 

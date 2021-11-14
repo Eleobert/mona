@@ -14,10 +14,10 @@ class text_renderer
     uint vao = 0;//, vbo = 0;
     struct character 
     {
-        unsigned int TextureID;  // ID handle of the glyph texture
-        glm::ivec2   Size;       // Size of glyph
-        glm::ivec2   Bearing;    // Offset from baseline to left/top of glyph
-        unsigned int Advance;    // Offset to advance to next glyph
+        unsigned int texture_id; // ID handle of the glyph texture
+        glm::vec2   size;        // Size of glyph
+        glm::vec2   bearing;     // Offset from baseline to left/top of glyph
+        long int advance;        // Offset to advance to next glyph
     };
 
     struct vbos_t
@@ -32,8 +32,7 @@ public:
     text_renderer(const std::string& font, int size);
     ~text_renderer();
     auto load_glyphs(FT_Library ft, FT_Face face) -> void;
-    void render(std::string text, float x, float y, float scale = 1.f, glm::vec3 color = {0, 0, 0});
-    void render(const std::string& text, glm::vec3 origin, glm::vec3 color);
-    void render(std::string text, glm::vec3 origin, glm::vec3 dir, glm::vec3 color);
-
+    void render(const std::string& text, glm::vec2 pos, float scale = 1.f,
+                glm::vec3 color = {0, 0, 0}, glm::vec2 origin = {-1, 1});
+    auto size(const std::string& text, float scale) -> glm::vec2;
 };
