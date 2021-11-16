@@ -14,12 +14,10 @@ add_subdirectory(examples)
 
 add_library(mona SHARED
         include/mona/plot/surface.hpp
-        include/mona/plot/line.hpp
         include/mona/internal/grid.hpp
         include/mona/internal/text_renderer.hpp
         include/mona/line.hpp
         src/plot/surface.cpp
-        /#src/plot/line.cpp
         src/target/window.cpp
         src/slam/slam.cpp
         src/slam/slam.h

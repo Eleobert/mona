@@ -1,10 +1,10 @@
 #include "slam/slam.h"
 #include "mona/line_renderer.hpp"
 
+using namespace gl;
 
 void line_renderer::gen_buffer()
 {
-    using namespace gl;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -23,11 +23,11 @@ void line_renderer::gen_buffer()
 
 void line_renderer::draw(const glm::mat4& mvp, glm::vec4 color)
 {
+    s.use();
     s.set_uniform("color", color / 255.f);
     s.set_uniform("mvp", mvp);
-    s.use();
-    gl::glBindVertexArray(vao);
-    gl::glDrawArrays(gl::GL_LINES, 0, vertices.size()*4);
-    gl::glBindVertexArray(0);
+    glBindVertexArray(vao);
+    glDrawArrays(gl::GL_LINES, 0, vertices.size()*4);
+    glBindVertexArray(0);
 
 }

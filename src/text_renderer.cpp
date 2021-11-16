@@ -32,7 +32,7 @@ auto init_freetype(const std::string& font, int size) -> std::tuple<FT_Library, 
 
 
 text_renderer::text_renderer(const std::string& font, int size)
-        : s("../../res/shaders/text_shader.vert", "../../res/shaders/text_shader.frag")
+        : s("../../../res/shaders/text_shader.vert", "../../../res/shaders/text_shader.frag")
 {
 
     using namespace gl;

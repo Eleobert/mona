@@ -14,12 +14,9 @@ namespace mona::targets
     {
         glm::vec2 mouse_pos;
         GLFWwindow* handle = nullptr;
-        bool clear = false;
-    
+
     public:
-        
-        //glm::vec3 background_color = colors::midnight_blue;
-        
+
         struct params
         {
             params() {}

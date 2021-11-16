@@ -122,10 +122,8 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
     // font_origin_y.x += sign(font_origin_y.x) * 1;
     // font_origin_x.x += sign(font_origin_x.x) * 1;
 
-
     auto ortho = glm::ortho(0.f, cam.view_port.z, 0.f, cam.view_port.w);
     trenderer.s.set_uniform("projection", ortho);
-
 
     linspace(trenderer, cam, x1, x2, x.x, x.y, n, font_origin_x);
     linspace(trenderer, cam, y1, y2, y.x, y.y, n, font_origin_y);

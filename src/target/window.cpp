@@ -100,10 +100,9 @@ auto window::control_camera(mona::camera cam) -> mona::camera
 
 auto window::begin_frame() -> void
 {
-    // auto bg = background_color / 255.f; 
-    //glClearColor(bg.r, bg.g, bg.b, 1);
-
-    clear = true;
+    int w, h;
+    glfwGetWindowSize(handle, &w, &h);
+    glViewport(0, 0, w, h);
 }
 
 
