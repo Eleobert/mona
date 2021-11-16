@@ -1,9 +1,6 @@
 #include "slam/slam.h"
 #include "mona/line_renderer.hpp"
 
-#include <glm/vec3.hpp>
-#include <vector>
-
 
 void line_renderer::gen_buffer()
 {
@@ -24,8 +21,11 @@ void line_renderer::gen_buffer()
 }
 
 
-void line_renderer::draw()
+void line_renderer::draw(const glm::mat4& mvp, glm::vec4 color)
 {
+    s.set_uniform("color", color / 255.f);
+    s.set_uniform("mvp", mvp);
+    s.use();
     gl::glBindVertexArray(vao);
     gl::glDrawArrays(gl::GL_LINES, 0, vertices.size()*4);
     gl::glBindVertexArray(0);

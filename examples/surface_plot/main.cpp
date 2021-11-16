@@ -10,7 +10,7 @@ auto f(double x, double y)
 
 int main()
 {
-    arma::vec line = mona::linspace(-2, 2, 50);
+    arma::fvec line = mona::linspace(-2, 2, 50);
     auto [x, y] = mona::meshgrid(line, line);
 
     auto z = mona::apply(f, x, y);

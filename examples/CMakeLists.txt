@@ -1,12 +1,6 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-project(surface_plot)
-set(CMAKE_CXX_STANDARD 17)
+project(examples)
 
-set(CMAKE_CXX_FLAGS "-O0 -g")
-
-add_executable(surface_plot main.cpp)
-
-target_compile_features(surface_plot PRIVATE cxx_std_17)
-target_include_directories(surface_plot PUBLIC ../include ..)
-target_link_libraries(surface_plot mona)
+add_subdirectory(line_plot)
+#add_subdirectory(surface_plot)

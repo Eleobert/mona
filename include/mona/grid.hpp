@@ -47,6 +47,6 @@ public:
 
     void draw()
     {
-        renderer.draw();
+        //renderer.draw({0, 0, 0});
     }
 };

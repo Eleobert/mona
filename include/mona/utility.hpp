@@ -33,12 +33,12 @@ namespace mona
     }
 
 
-    auto linspace(double a, double b, size_t n)
+    auto linspace(float a, float b, size_t n)
     {
         assert(b > a);
         assert(n > 1);
 
-        arma::vec res(n);
+        arma::fvec res(n);
         const auto step = (b - a) / (n - 1);
         auto val = a;
         for(auto& e: res)

@@ -13,7 +13,8 @@ public:
     void use();
     void set_uniform(const std::string& name, const glm::mat4& mat);
     void set_uniform(const std::string& name, int value);
-    void set_uniform(const std::string& name, const glm::vec3 vec);
+    void set_uniform(const std::string& name, const glm::vec3& vec);
+    void set_uniform(const std::string& name, const glm::vec4& vec);
 
 
 };

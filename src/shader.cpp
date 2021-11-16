@@ -85,10 +85,17 @@ void shader::set_uniform(const std::string& name, int value)
 }
 
 
-void shader::set_uniform(const std::string& name, const glm::vec3 vec)
+void shader::set_uniform(const std::string& name, const glm::vec3& vec)
 {
     this->use();
     int loc = gl::glGetUniformLocation(program, name.c_str());
     gl::glUniform3f(loc, vec.x, vec.y, vec.z);
+}
+
+void shader::set_uniform(const std::string& name, const glm::vec4& vec)
+{
+    this->use();
+    int loc = gl::glGetUniformLocation(program, name.c_str());
+    gl::glUniform4f(loc, vec.x, vec.y, vec.z, vec.w);
 }
 
