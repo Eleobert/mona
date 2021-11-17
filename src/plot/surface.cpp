@@ -9,7 +9,7 @@
 
 namespace mona::plot
 {
-    auto surface(const arma::mat& x, const arma::mat& y, const arma::mat& z) -> void
+    auto surface(const arma::fmat& x, const arma::fmat& y, const arma::fmat& z) -> void
     {
         auto target = mona::targets::window();
         auto [w, h] = target.size();

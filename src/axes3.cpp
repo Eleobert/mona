@@ -1,7 +1,6 @@
 #include "mona/axes3.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/matrix_integer.hpp>
 
 
 auto linspace(text_renderer& trenderer, const mona::camera& cam, glm::vec3 a, glm::vec3 b,
@@ -26,10 +25,9 @@ auto linspace(text_renderer& trenderer, const mona::camera& cam, glm::vec3 a, gl
 #include <iostream>
 
 mona::axes3::axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n): x(x), y(y), z(z), n(n),
-    trenderer("../../res/fonts/Quivira.otf", 12)
+    trenderer("../../../res/fonts/Quivira.otf", 12)
 {
     assert(n > 0);
-    std::cout <<z.x << " " << z.y << "\n";
     bottom = grid({-1,-1,-1}, {-1,-1, 1}, { 1,-1,-1}, { 1,-1, 1}, n);
     up     = grid({ 1, 1,-1}, { 1, 1, 1}, {-1, 1,-1}, {-1, 1, 1}, n);
     left   = grid({-1, 1, 1}, {-1,-1, 1}, {-1, 1,-1}, {-1,-1,-1}, n);

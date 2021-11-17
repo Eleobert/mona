@@ -27,7 +27,7 @@ auto gen_indices(int n)
 }
 
 
-auto gen_vertices(const arma::mat& x, const arma::mat& y, const arma::mat& z)
+auto gen_vertices(const arma::fmat& x, const arma::fmat& y, const arma::fmat& z)
 {
     std::vector<glm::vec3> vertices;
 
@@ -75,7 +75,7 @@ auto gen_normals(const std::vector<glm::vec3>& vertices, const std::vector<glm::
     return normals;
 }
 
-auto generate_vertex_data(const arma::mat& x, const arma::mat& y, const arma::mat& z)
+auto generate_vertex_data(const arma::fmat& x, const arma::fmat& y, const arma::fmat& z)
     -> std::tuple<std::vector<glm::vec3>, std::vector<glm::vec3>, std::vector<glm::uvec3>>
  {
     assert(x.n_cols > 0);
@@ -125,8 +125,8 @@ auto generate_vertex_data(const arma::mat& x, const arma::mat& y, const arma::ma
      return vao;
  }
 
-mona::surface_mesh::surface_mesh(const arma::mat& x, const arma::mat& y, const arma::mat& z):
-    s("../../res/shaders/shader.vert", "../../res/shaders/shader.frag")
+mona::surface_mesh::surface_mesh(const arma::fmat& x, const arma::fmat& y, const arma::fmat& z):
+    s("../../../res/shaders/shader.vert", "../../../res/shaders/shader.frag")
 {
     assert(x.n_rows == y.n_rows);
     assert(x.n_rows == z.n_rows);

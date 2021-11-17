@@ -24,7 +24,7 @@ namespace mona
         std::vector<glm::vec3> normals;
         std::vector<glm::uvec3> indices;
 
-        surface_mesh(const arma::mat& x, const arma::mat& y, const arma::mat& z);
+        surface_mesh(const arma::fmat& x, const arma::fmat& y, const arma::fmat& z);
         ~surface_mesh();
 
         auto draw(const mona::camera& cam, mona::targets::target& t) const -> void;

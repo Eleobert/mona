@@ -3,10 +3,10 @@
 
 namespace mona
 {
-    auto meshgrid(const arma::vec& x, const arma::vec& y) -> std::tuple<arma::mat, arma::mat>
+    auto meshgrid(const arma::fvec& x, const arma::fvec& y) -> std::tuple<arma::fmat, arma::fmat>
     {
-        arma::mat x_mat(y.size(), x.size());
-        arma::mat y_mat(y.size(), x.size());
+        arma::fmat x_mat(y.size(), x.size());
+        arma::fmat y_mat(y.size(), x.size());
 
         x_mat.each_row() = x.t();
         y_mat.each_col() = y;
@@ -15,12 +15,12 @@ namespace mona
     }
 
     template <typename Callable>
-    auto apply(Callable f, const arma::mat& x, const arma::mat& y) -> arma::mat
+    auto apply(Callable f, const arma::fmat& x, const arma::fmat& y) -> arma::fmat
     {
         assert(x.n_rows == y.n_rows);
         assert(x.n_cols == y.n_cols);
 
-        arma::mat z(x.n_rows, x.n_cols);
+        arma::fmat z(x.n_rows, x.n_cols);
 
         for(auto j = 0ul; j < x.n_cols; j++)
         {
