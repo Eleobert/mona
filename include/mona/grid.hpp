@@ -1,7 +1,7 @@
 #pragma once
 
 #include "line_renderer.hpp"
-
+#include "camera.hpp"
 
 class grid
 {
@@ -45,8 +45,8 @@ public:
         renderer.gen_buffer();
     }
 
-    void draw()
+    void draw(const glm::mat4& mvp)
     {
-        //renderer.draw({0, 0, 0});
+        renderer.draw(mvp, {0, 0, 0, 255}, 1.f);
     }
 };

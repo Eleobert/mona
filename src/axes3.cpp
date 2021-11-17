@@ -36,17 +36,17 @@ mona::axes3::axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n): x(x), y(y), z(
     back   = grid({-1,-1, 1}, {-1, 1, 1}, { 1,-1, 1}, { 1, 1, 1}, n);
 }
 
-auto draw_grid(grid& g, glm::mat3 mvp) -> bool
+auto draw_grid(grid& g, glm::mat4 mvpersp, glm::mat3 mvortho) -> bool
 {
-    auto a = mvp * g.b - mvp * g.a;
-    auto b = mvp * g.c - mvp * g.a;
+    auto a = mvortho * g.b - mvortho * g.a;
+    auto b = mvortho * g.c - mvortho * g.a;
 
     auto mat = glm::mat3(a, b, glm::vec3(1));
     // manual face culling: it is better to have mvp constructed from orthographic
     // projection matrix to avoid two parallel faces being displayed at the same time
     if(glm::determinant(mat) > 0)
     {
-        g.draw();
+        g.draw(mvpersp);
         return true;
     }
     return false;
@@ -59,12 +59,12 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
 
     auto mvporth = cam.mvorth();
     auto mvpersp = cam.mvprsp();
-    auto visible_bottom = draw_grid(bottom, mvporth);
-    auto visible_up     = draw_grid(up, mvporth);
-    auto visible_left   = draw_grid(left, mvporth);
-    auto visible_right  = draw_grid(right, mvporth);
-    auto visible_front  = draw_grid(front, mvporth);
-    auto visible_back   = draw_grid(back, mvporth);
+    auto visible_bottom = draw_grid(bottom, mvpersp, mvporth);
+    auto visible_up     = draw_grid(up, mvpersp, mvporth);
+    auto visible_left   = draw_grid(left, mvpersp, mvporth);
+    auto visible_right  = draw_grid(right, mvpersp, mvporth);
+    auto visible_front  = draw_grid(front, mvpersp, mvporth);
+    auto visible_back   = draw_grid(back, mvpersp, mvporth);
 
     auto num = [](bool b)
     {
