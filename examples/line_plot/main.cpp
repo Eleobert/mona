@@ -23,12 +23,14 @@ int main()
     auto axes = mona::axes();
     auto line1 = mona::line(x, y, mona::colors::midnight_blue);
     auto line2 = mona::line(x, y % x, mona::colors::orange_red);
+    auto line3 = mona::line(x, y - x, mona::colors::black);
 
     while (target.active())
     {
         cam = target.control_camera(cam);
         axes.add(line1);
         axes.add(line2);
+        axes.add(line3);
         axes.draw(cam, target); // we sould not need camera here
         target.draw();
     }

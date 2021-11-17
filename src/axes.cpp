@@ -27,6 +27,17 @@ auto linspace(text_renderer& trenderer, glm::vec2 a, glm::vec2 b,
     }
 }
 
+auto add_ticks_guides(line_renderer& r, glm::vec2 a, glm::vec2 b, glm::vec3 w, int n)
+{
+    auto pos = glm::vec3(a, 0.f);
+    auto step = glm::vec3((b - a) / (n - 1.f), 0.f);
+    for(auto i = 0u; i < n; i++)
+    {
+        r.submit(pos, pos - w);
+        pos += step;
+    }
+}
+
 mona::axes::axes(params par): par(par), x(inf, -inf), y(inf, -inf),
     trenderer("../../../res/fonts/Quivira.otf", 15)
 {
@@ -35,12 +46,16 @@ mona::axes::axes(params par): par(par), x(inf, -inf), y(inf, -inf),
     auto y1 = 1 - par.padding_up;
     auto y2 = par.padding_down - 1;
 
-    lrenderer.submit({x1, y1, 0}, {x2, y1, 0});
-    lrenderer.submit({x2, y1, 0}, {x2, y2, 0});
-    lrenderer.submit({x2, y2, 0}, {x1, y2, 0});
-    lrenderer.submit({x1, y2, 0}, {x1, y1, 0});
+    port_boundary.submit({x1, y1, 0}, {x2, y1, 0});
+    port_boundary.submit({x2, y1, 0}, {x2, y2, 0});
+    port_boundary.submit({x2, y2, 0}, {x1, y2, 0});
+    port_boundary.submit({x1, y2, 0}, {x1, y1, 0});
 
-    lrenderer.gen_buffer();
+    constexpr auto w = 0.03;
+    add_ticks_guides(port_boundary, {x1, y1}, {x1, y2}, {w, 0, 0}, par.n_bins);
+    add_ticks_guides(port_boundary, {x1, y2}, {x2, y2}, {0, w, 0}, par.n_bins);
+
+    port_boundary.gen_buffer();
 }
 
 auto draw_y_ticks(text_renderer& r, const mona::viewport port, const arma::fvec& yy, float pad = 15)
@@ -91,10 +106,7 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
     glm::ivec4 prev_viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(prev_viewport));
 
-    auto p = 0.15f;
-
-
-    lrenderer.draw(glm::mat4(1.f), mona::colors::black);
+    port_boundary.draw(glm::mat4(1.f), mona::colors::black);
     // TODO: viewport should come from target
     trenderer.s.set_uniform("projection", glm::ortho(0.f, cam.view_port.z, 0.f, cam.view_port.w));
 

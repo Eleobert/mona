@@ -31,9 +31,7 @@ namespace mona
         glm::vec2 x, y;
 
     public:
-
-
-        line_renderer lrenderer;
+        line_renderer port_boundary;
         text_renderer trenderer;
 
         axes(params p = params());
