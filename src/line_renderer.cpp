@@ -3,6 +3,13 @@
 
 using namespace gl;
 
+line_renderer::line_renderer():
+    s("../../../res/shaders/lines.vert", "../../../res/shaders/lines.frag")
+{
+    glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+}
+
 void line_renderer::gen_buffer()
 {
 
@@ -21,13 +28,15 @@ void line_renderer::gen_buffer()
 }
 
 
-void line_renderer::draw(const glm::mat4& mvp, glm::vec4 color)
+void line_renderer::draw(const glm::mat4& mvp, glm::vec4 color, float thickness)
 {
+    glLineWidth(thickness);
     s.use();
     s.set_uniform("color", color / 255.f);
     s.set_uniform("mvp", mvp);
     glBindVertexArray(vao);
     glDrawArrays(gl::GL_LINES, 0, vertices.size()*4);
     glBindVertexArray(0);
+    glLineWidth(1.f);
 
 }

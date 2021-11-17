@@ -22,7 +22,7 @@ namespace mona
 
         auto draw(const glm::mat4& mvp)
         {
-            renderer.draw(mvp, color);
+            renderer.draw(mvp, color, 1.5f);
         }
 
     };

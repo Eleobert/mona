@@ -106,7 +106,7 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
     glm::ivec4 prev_viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(prev_viewport));
 
-    port_boundary.draw(glm::mat4(1.f), mona::colors::black);
+    port_boundary.draw(glm::mat4(1.f), mona::colors::black, 1.f);
     // TODO: viewport should come from target
     trenderer.s.set_uniform("projection", glm::ortho(0.f, cam.view_port.z, 0.f, cam.view_port.w));
 
@@ -131,7 +131,7 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 
 auto mona::axes::add(const mona::line& ls) -> void
 {
-    this->ls.push_back(ls);
+    auto ref = this->ls.emplace_back(ls);
 
     auto [x_min, x_max] = std::ranges::minmax(ls.x);
     auto [y_min, y_max] = std::ranges::minmax(ls.y);

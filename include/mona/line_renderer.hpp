@@ -19,8 +19,7 @@ class line_renderer
     uint32_t vao = 0;
 public:
 
-    line_renderer(): s("../../../res/shaders/lines.vert", "../../../res/shaders/lines.frag")
-    {}
+    line_renderer();
 
     void submit(glm::vec3 a, glm::vec3 b)
     {
@@ -28,5 +27,5 @@ public:
     }
 
     auto gen_buffer() -> void;
-    auto draw(const glm::mat4& mvp, glm::vec4 color) -> void;
+    auto draw(const glm::mat4& mvp, glm::vec4 color, float thickness) -> void;
 };
