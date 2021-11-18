@@ -17,7 +17,7 @@ namespace mona
 
     public:
         glm::vec4 color;
-        const arma::fvec x, y, z;
+
         line(const arma::fvec& x, const arma::fvec& y, const arma::fvec& z,
              glm::vec4 color = colors::black);
         line(const arma::fvec& x, const arma::fvec& y,

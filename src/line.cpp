@@ -16,17 +16,17 @@ auto submit(line_renderer& renderer, const arma::fvec& x, const arma::fvec& y, c
 
 
 mona::line::line(const arma::fvec& x, const arma::fvec& y, const arma::fvec& z, glm::vec4 color):
-    x(x), y(y), z(z), color(color)
+    color(color)
 {
     span_area = submit(renderer, x, y, z);
 }
 
 
-mona::line::line(const arma::fvec& x, const arma::fvec& y, glm::vec4 color): x(x), y(y),
-    z(x.size(),arma::fill::zeros), color(color)
+mona::line::line(const arma::fvec& x, const arma::fvec& y, glm::vec4 color): color(color)
 {
-    span_area = submit(renderer, x, y, z);
+    span_area = submit(renderer, x, y, arma::fvec(x.size(),arma::fill::zeros));
 }
+
 
 auto mona::line::reset(const arma::fvec& x, const arma::fvec y) -> void
 {
