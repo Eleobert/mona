@@ -8,16 +8,21 @@
 
 class line_renderer
 {
-    struct line
+public:
+    struct vertex
     {
         glm::vec3 a;
         glm::vec3 b;
     };
 
+private:
+    size_t size;
     shader s;
-    std::vector<line> vertices;
+    std::vector<vertex> vertices;
     uint32_t vao = 0;
+    uint32_t vbo = 0;
 public:
+
 
     line_renderer();
 
@@ -28,4 +33,5 @@ public:
 
     auto gen_buffer() -> void;
     auto draw(const glm::mat4& mvp, glm::vec4 color, float thickness) -> void;
+    auto reset(const std::vector<vertex>& vertices) -> void;
 };

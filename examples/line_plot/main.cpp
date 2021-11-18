@@ -26,15 +26,25 @@ int main()
     auto line2 = mona::line(x, y % x, mona::colors::orange_red);
     auto line3 = mona::line(x, y - x, mona::colors::pale_violet_red);
 
-    axes.add(line1);
-    axes.add(line2);
-    axes.add(line3);
 
-    float f = 0.0;
+    float delta = 0;
     while (target.active())
     {
+        axes.submit(line1);
+        axes.submit(line2);
+        axes.submit(line3);
+
+        arma::fvec t = x + delta;
+        t.transform(f);
+        delta += 0.04;
+
+        line1.reset(x, t);
+        line1.color.r = 255.f * std::cos(glfwGetTime());
+        line1.color.b = 255.f * std::sin(glfwGetTime());
+        line1.color.b = 255.f * std::sin(glfwGetTime()) * std::cos(glfwGetTime()) ;
+
         cam = target.control_camera(cam);
-        axes.draw(cam, target); // we sould not need camera here
+        axes.draw(cam, target); // we should not need camera here
         target.draw();
     }
 }

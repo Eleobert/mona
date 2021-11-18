@@ -28,7 +28,6 @@ namespace mona
     private:
         axes::params par;
         std::vector<line> ls;
-        glm::vec2 x, y;
 
     public:
         line_renderer port_boundary;
@@ -36,7 +35,7 @@ namespace mona
 
         axes(params p = params());
         auto draw(const camera& cam, mona::targets::target& t) -> void;
-        auto add(const line& ls) -> void;
+        auto submit(const line& ls) -> void;
 
     };
 }
