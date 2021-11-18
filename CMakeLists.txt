@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(mona)
 
-#set(CMAKE_CXX_FLAGS "-O0 -g")
+set(CMAKE_CXX_FLAGS "-O0 -g")
 
-#include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+find_package(armadillo REQUIRED)
 
 find_package(glm REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(Freetype REQUIRED)
-#find_package(armadillo REQUIRED)
 
 add_subdirectory(examples)
 
@@ -29,6 +28,7 @@ add_library(mona SHARED
         src/text_renderer.cpp
         src/line_renderer.cpp include/mona/axes.hpp src/axes.cpp src/line.cpp)
 
+target_compile_definitions(mona PUBLIC ARMA_DONT_USE_HDF5)
 target_compile_features(mona PRIVATE cxx_std_20)
 target_include_directories(mona PUBLIC include)
 target_link_libraries(mona dl glfw Freetype::Freetype glm::glm)
