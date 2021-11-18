@@ -8,24 +8,7 @@
 #include <algorithm>
 
 using namespace gl;
-constexpr auto inf = std::numeric_limits<float>::infinity();
 
-
-auto linspace(text_renderer& trenderer, glm::vec2 a, glm::vec2 b,
-              float start, float end, int n, glm::vec2 font_origin)
-{
-    const auto coord_step = (b - a) / (static_cast<float>(n) - 1.f);
-    const auto value_step = (end - start) / (n - 1.0);
-
-    for(auto i = 0; i < n; i++)
-    {
-        char buffer[50];
-        sprintf(buffer, "%.3f", start);
-        trenderer.render(buffer, a, 1, {0, 0, 0}, font_origin);
-        a += coord_step;
-        start += value_step;
-    }
-}
 
 auto add_ticks_guides(line_renderer& r, glm::vec2 a, glm::vec2 b, glm::vec3 w, int n)
 {

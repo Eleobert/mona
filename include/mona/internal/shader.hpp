@@ -11,6 +11,7 @@ class shader
 public:
     shader(const std::string& vshader_filename, const std::string& fshader_filename);
     void use();
+    void unuse();
     void set_uniform(const std::string& name, const glm::mat4& mat);
     void set_uniform(const std::string& name, int value);
     void set_uniform(const std::string& name, const glm::vec3& vec);

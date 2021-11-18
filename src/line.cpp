@@ -44,6 +44,7 @@ auto mona::line::reset(const arma::fvec& x, const arma::fvec y) -> void
         vec[i].b.y = y[i];
     }
     renderer.reset(vec);
+    span_area = mona::rect{x.min(), y.min(), x.max(), y.max()};
 }
 
 

@@ -9,7 +9,7 @@ namespace mona::targets
     public:
         /**
          * Some targets may want to control the camera, e.g:
-         * a window targets with a 3d plot.
+         * a window target with a 3d plot.
          */
         virtual auto control_camera(mona::camera camera) -> mona::camera
         {

@@ -148,7 +148,9 @@ auto mona::surface_mesh::draw(const mona::camera& cam, mona::targets::target& t)
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size() * 3, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
+    s.unuse();
     t.end_frame();
+
 }
 
 

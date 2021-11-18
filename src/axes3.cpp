@@ -127,6 +127,8 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
     linspace(trenderer, cam, y1, y2, y.x, y.y, n, font_origin_y);
     linspace(trenderer, cam, z1, z2, z.x, z.y, n, font_origin_z);
 
+    trenderer.s.unuse();
+
     t.end_frame();
 }
 

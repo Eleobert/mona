@@ -44,7 +44,7 @@ void line_renderer::draw(const glm::mat4& mvp, glm::vec4 color, float thickness)
     glDrawArrays(gl::GL_LINES, 0, vertices.size()*4);
     glBindVertexArray(0);
     glLineWidth(1.f);
-
+    s.unuse();
 }
 
 
