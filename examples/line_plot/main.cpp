@@ -18,8 +18,8 @@ int main()
     y.transform(f);
 
     auto target = mona::targets::window();
-    auto [w, h] = target.size();
-    auto cam = mona::camera(w, h); // viewport should be set on control camera
+    auto vp = target.viewport();
+    auto cam = mona::camera(); // viewport should be set on control camera
     auto axes = mona::axes();
 
     auto line1 = mona::line(x, y, mona::colors::midnight_blue);

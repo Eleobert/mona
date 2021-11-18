@@ -3,15 +3,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 
-auto linspace(text_renderer& trenderer, const mona::camera& cam, glm::vec3 a, glm::vec3 b,
-              float start, float end, int n, glm::vec2 font_origin)
+auto linspace(text_renderer& trenderer, glm::vec3 a, glm::vec3 b,
+              float start, float end, int n, glm::vec2 font_origin, glm::mat4 mvp, mona::rect vp)
 {
     const auto coord_step = (b - a) / (static_cast<float>(n) - 1.f);
     const auto value_step = (end - start) / (n - 1.0);
 
     for(auto i = 0; i < n; i++)
     {
-        auto p = glm::project(a, glm::mat4(1.f), cam.mvprsp(), cam.view_port);
+        auto p = glm::project(a, glm::mat4(1.f), mvp, glm::vec4 {vp.x, vp.y, vp.w, vp. h});
         char buffer[50];
         sprintf(buffer, "%.3f", start);
         const auto size = trenderer.size(buffer, 1);
@@ -25,7 +25,7 @@ auto linspace(text_renderer& trenderer, const mona::camera& cam, glm::vec3 a, gl
 #include <iostream>
 
 mona::axes3::axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n): x(x), y(y), z(z), n(n),
-    trenderer("../../../res/fonts/Quivira.otf", 12)
+    trenderer("../../../res/fonts/Quivira.otf", 13)
 {
     assert(n > 0);
     bottom = grid({-1,-1,-1}, {-1,-1, 1}, { 1,-1,-1}, { 1,-1, 1}, n);
@@ -34,6 +34,8 @@ mona::axes3::axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n): x(x), y(y), z(
     right  = grid({ 1, 1,-1}, { 1,-1,-1}, { 1, 1, 1}, { 1,-1, 1}, n);
     front  = grid({ 1,-1,-1}, { 1, 1,-1}, {-1,-1,-1}, {-1, 1,-1}, n);
     back   = grid({-1,-1, 1}, {-1, 1, 1}, { 1,-1, 1}, { 1, 1, 1}, n);
+
+    orthogonal_proj = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
 }
 
 auto draw_grid(grid& g, glm::mat4 mvpersp, glm::mat3 mvortho) -> bool
@@ -57,8 +59,11 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
 {
     t.begin_frame();
 
-    auto mvporth = cam.mvorth();
-    auto mvpersp = cam.mvprsp();
+    auto vp = t.viewport();
+    auto perspective_proj =  glm::perspective(glm::radians(45.0f), vp.w/vp.h, 0.1f, 100.0f);
+
+    auto mvporth = orthogonal_proj * cam.view();
+    auto mvpersp = perspective_proj * cam.view();
     auto visible_bottom = draw_grid(bottom, mvpersp, mvporth);
     auto visible_up     = draw_grid(up, mvpersp, mvporth);
     auto visible_left   = draw_grid(left, mvpersp, mvporth);
@@ -111,24 +116,25 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
     font_origin_y.x = -font_origin_x.x;
     font_origin_y.y = font_origin_x.y;
 
-    // auto sign = [](float x)
-    // {
-    //     return x < 0? -1: 1;
-    // };
 
-    // font_origin_z.x += sign(font_origin_z.x) * 0.6;
-    // font_origin_y.x += sign(font_origin_y.x) * 1;
-    // font_origin_x.x += sign(font_origin_x.x) * 1;
+    auto ortho = glm::ortho(vp.x, vp.x + vp.w, vp.y, vp.y + vp.h);
 
-    auto ortho = glm::ortho(0.f, cam.view_port.z, 0.f, cam.view_port.w);
+    for(auto& mesh: meshes)
+    {
+        mesh.draw(mvpersp);
+    }
+
     trenderer.s.set_uniform("projection", ortho);
-
-    linspace(trenderer, cam, x1, x2, x.x, x.y, n, font_origin_x);
-    linspace(trenderer, cam, y1, y2, y.x, y.y, n, font_origin_y);
-    linspace(trenderer, cam, z1, z2, z.x, z.y, n, font_origin_z);
-
-    trenderer.s.unuse();
+    linspace(trenderer, x1, x2, x.x, x.y, n, font_origin_x, mvpersp, vp);
+    linspace(trenderer, y1, y2, y.x, y.y, n, font_origin_y, mvpersp, vp);
+    linspace(trenderer, z1, z2, z.x, z.y, n, font_origin_z, mvpersp, vp);
 
     t.end_frame();
+    meshes.clear();
+}
+
+auto mona::axes3::submit(const mona::surface_mesh& mesh) -> void
+{
+    meshes.push_back(mesh);
 }
 

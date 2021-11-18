@@ -27,6 +27,6 @@ namespace mona
         surface_mesh(const arma::fmat& x, const arma::fmat& y, const arma::fmat& z);
         ~surface_mesh();
 
-        auto draw(const mona::camera& cam, mona::targets::target& t) const -> void;
+        auto draw(const glm::mat4& mvp) const -> void;
     };
 }

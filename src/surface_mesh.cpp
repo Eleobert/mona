@@ -139,24 +139,21 @@ mona::surface_mesh::surface_mesh(const arma::fmat& x, const arma::fmat& y, const
 }
 
 
-auto mona::surface_mesh::draw(const mona::camera& cam, mona::targets::target& t) const -> void
+auto mona::surface_mesh::draw(const glm::mat4& mvp) const -> void
 {
-    t.begin_frame();
     s.use();
-    s.set_uniform("mvp", cam.mvprsp());
+    s.set_uniform("mvp", mvp);
     s.set_uniform("render_mode", 1);
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size() * 3, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
     s.unuse();
-    t.end_frame();
-
 }
 
 
 mona::surface_mesh::~surface_mesh()
 {
-    // TODO: do I need to delete the buffers
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
+    // TODO: delete the buffers
+//    glDeleteBuffers(1, &vbo);
+//    glDeleteVertexArrays(1, &vao);
 }

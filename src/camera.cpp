@@ -2,12 +2,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-mona::camera::camera(float w, float h)
-{
-    perspective = glm::perspective(glm::radians(45.0f), w/h, 0.1f, 100.0f);
-    orthogonal = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
-}
-
 
 auto mona::camera::view() const -> glm::mat4
 {
@@ -22,16 +16,4 @@ auto mona::camera::view() const -> glm::mat4
     auto up    = glm::normalize(glm::cross(right, front));
 
     return glm::lookAt(pos, glm::vec3(0.f), up);
-}
-
-
-auto mona::camera::mvprsp() const -> glm::mat4
-{
-    return perspective * view();
-}
-
-
-auto mona::camera::mvorth() const -> glm::mat4
-{
-    return orthogonal * view();
 }

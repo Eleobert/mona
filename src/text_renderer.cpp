@@ -123,8 +123,7 @@ void text_renderer::render(const std::string& text, glm::vec2  p, float scale, g
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(vao);
 
-    auto s = size(text, scale);
-    p -= s * (origin + glm::vec2(1)) * 0.5f;
+    p -= size(text, scale) * (origin + glm::vec2(1)) * 0.5f;
 
     // iterate through all characters
 
@@ -160,6 +159,7 @@ void text_renderer::render(const std::string& text, glm::vec2  p, float scale, g
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+    s.unuse();
 }
 
 

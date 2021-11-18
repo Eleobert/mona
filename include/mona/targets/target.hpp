@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mona/camera.hpp"
+#include <mona/rect.hpp>
 
 namespace mona::targets
 {
@@ -23,5 +24,7 @@ namespace mona::targets
         virtual auto active() -> bool = 0;
 
         virtual auto draw() -> void = 0;
+
+        virtual auto viewport() -> mona::rect = 0;
     };
 }

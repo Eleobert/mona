@@ -32,7 +32,6 @@ namespace mona::targets
         auto begin_frame() -> void override;
         auto end_frame() -> void override;
         auto draw() -> void override;
-
-        auto size() -> std::tuple<float, float>;
+        auto viewport() -> mona::rect  override;
     };
 }

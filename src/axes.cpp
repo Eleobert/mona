@@ -40,6 +40,7 @@ mona::axes::axes(params par): par(par), trenderer("../../../res/fonts/Quivira.ot
     port_boundary.gen_buffer();
 }
 
+
 auto draw_y_ticks(text_renderer& r, const mona::rect port, const arma::fvec& yy, float pad = 15)
 {
     auto pos = glm::vec2(port.x, port.y);
@@ -71,12 +72,12 @@ auto draw_x_ticks(text_renderer& r, const mona::rect port, const arma::fvec& xx,
 
 
 // return the plot area viewport
-auto get_viewport(const mona::axes::params& par, const mona::camera& cam) -> mona::rect
+auto get_viewport(const mona::axes::params& par, const mona::rect& target_vp) -> mona::rect
 {
-    auto x = cam.view_port.x + par.padding_left * cam.view_port.z / 2.f;
-    auto y = cam.view_port.y + par.padding_down * cam.view_port.w / 2.f;
-    auto w = (2 - (par.padding_left + par.padding_right)) * cam.view_port.z / 2.f;
-    auto h = (2 - (par.padding_up + par.padding_down)) * cam.view_port.w / 2.f;
+    auto x = target_vp.x + par.padding_left * target_vp.w / 2.f;
+    auto y = target_vp.y + par.padding_down * target_vp.h / 2.f;
+    auto w = (2 - (par.padding_left + par.padding_right)) * target_vp.w / 2.f;
+    auto h = (2 - (par.padding_up + par.padding_down)) * target_vp.h / 2.f;
     return {x, y, w, h};
 }
 
@@ -106,9 +107,11 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 
     port_boundary.draw(glm::mat4(1.f), mona::colors::black, 1.f);
     // TODO: viewport should come from target
-    trenderer.s.set_uniform("projection", glm::ortho(0.f, cam.view_port.z, 0.f, cam.view_port.w));
+    auto t_vp = t.viewport();
+    trenderer.s.set_uniform("projection", glm::ortho(t_vp.x, t_vp.x + t_vp.w, t_vp.y,
+                                                     t_vp.y + t_vp.h));
 
-    auto vp = get_viewport(par, cam);
+    auto vp = get_viewport(par, t.viewport());
     auto span = get_plot_span(ls);
     draw_x_ticks(trenderer, vp, mona::linspace(span.x, span.w, par.n_bins));
     draw_y_ticks(trenderer, vp, mona::linspace(span.y, span.h, par.n_bins));

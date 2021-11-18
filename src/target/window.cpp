@@ -46,8 +46,11 @@ auto add_debug_callback()
     (gl::GLenum source, gl::GLenum type, gl::GLuint id, gl::GLenum severity, gl::GLsizei length,
                 const gl::GLchar *message, const void *userParam)
     {
-        if(severity > GL_DEBUG_SEVERITY_NOTIFICATION) 
+        if(severity > GL_DEBUG_SEVERITY_NOTIFICATION)
+        {
             std::cerr << message << '\n';
+            assert(false);
+        }
     }, nullptr);
 }
 
@@ -91,9 +94,6 @@ auto window::control_camera(mona::camera cam) -> mona::camera
     dist_inc = dist_inc + cam_dist < min_dist? 0: dist_inc;
     cam.zoom(dist_inc);
 
-    auto [w, h] = this->size();
-    cam.view_port = {0, 0, w, h};
-
     return cam;
 }
 
@@ -118,13 +118,6 @@ auto window::active() -> bool
 }
 
 
-auto window::size() -> std::tuple<float, float>
-{
-    int w, h;
-    glfwGetWindowSize(handle, &w, &h);
-    return {w, h};
-}
-
 auto window::draw() -> void
 {
     glfwPollEvents();
@@ -132,4 +125,12 @@ auto window::draw() -> void
 
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+
+auto window::viewport() -> mona::rect
+{
+    int w, h;
+    glfwGetWindowSize(handle, &w, &h);
+    return {0.f, 0.f, static_cast<float>(w), static_cast<float>(h)};
 }
