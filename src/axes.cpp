@@ -127,8 +127,8 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 
     auto vp = get_viewport(par, cam);
     auto span = get_plot_span(ls);
-    draw_y_ticks(trenderer, vp, mona::linspace(span.x, span.w, par.n_bins));
-    draw_x_ticks(trenderer, vp, mona::linspace(span.y, span.h, par.n_bins));
+    draw_x_ticks(trenderer, vp, mona::linspace(span.x, span.w, par.n_bins));
+    draw_y_ticks(trenderer, vp, mona::linspace(span.y, span.h, par.n_bins));
 
     glViewport(vp.x, vp.y, vp.w, vp.h);
 
