@@ -2,6 +2,7 @@
 #include "slam/slam.h"
 #include "mona/rect.hpp"
 #include "mona/utility.hpp"
+#include "mona/dots.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 #include <limits>
@@ -82,7 +83,7 @@ auto get_viewport(const mona::axes::params& par, const mona::rect& target_vp) ->
 }
 
 
-auto get_plot_span(const std::vector<mona::line>& ls)
+auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::dots>& ds)
 {
     constexpr auto inf = std::numeric_limits<float>::infinity();
     auto res = mona::rect{inf, inf, -inf, -inf};
@@ -90,6 +91,15 @@ auto get_plot_span(const std::vector<mona::line>& ls)
     for(auto& l: ls)
     {
         auto span = l.span();
+        res.x = std::min(res.x, span.x);
+        res.w = std::max(res.w, span.w);
+        res.y = std::min(res.y, span.y);
+        res.h = std::max(res.h, span.h);
+    }
+
+    for(auto& d: ds)
+    {
+        auto span = d.span();
         res.x = std::min(res.x, span.x);
         res.w = std::max(res.w, span.w);
         res.y = std::min(res.y, span.y);
@@ -112,7 +122,7 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
                                                      t_vp.y + t_vp.h));
 
     auto vp = get_viewport(par, t.viewport());
-    auto span = get_plot_span(ls);
+    auto span = get_plot_span(ls, ds);
     draw_x_ticks(trenderer, vp, mona::linspace(span.x, span.w, par.n_bins));
     draw_y_ticks(trenderer, vp, mona::linspace(span.y, span.h, par.n_bins));
 
@@ -123,6 +133,11 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
     for(auto& l: ls)
     {
        l.draw(ortho);
+    }
+
+    for(auto& d: ds)
+    {
+        d.draw(ortho);
     }
 
     glViewport(prev_viewport.x, prev_viewport.y, prev_viewport.z, prev_viewport.w);
@@ -136,4 +151,9 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 auto mona::axes::submit(const mona::line& l) -> void
 {
     auto ref = this->ls.emplace_back(l);
+}
+
+auto mona::axes::submit(const mona::dots& l) -> void
+{
+    auto ref = this->ds.emplace_back(l);
 }

@@ -8,7 +8,6 @@
 #include <fstream>
 #include <iostream>
 
-
 auto compile(gl::GLenum shader_type, const std::string& path) -> gl::GLuint
 {
     std::ifstream file;
@@ -35,32 +34,43 @@ auto compile(gl::GLenum shader_type, const std::string& path) -> gl::GLuint
     return id;
 }
 
-auto link(gl::GLuint vshader, gl::GLuint fshader) -> gl::GLuint
+auto link(gl::GLuint vshader, gl::GLuint fshader, gl::GLuint gshader) -> gl::GLuint
 {
     auto program = gl::glCreateProgram();
     gl::glAttachShader(program, vshader);
     gl::glAttachShader(program, fshader);
+    if(gshader) gl::glAttachShader(program, gshader);
+
     gl::glLinkProgram(program);
 
     auto success = 0;
 
     gl::glGetProgramiv(program, gl::GL_LINK_STATUS, &success);
-    
+
     if(success != gl::GL_TRUE)
     {
         char msg[512];
-        gl::glGetShaderInfoLog(program, sizeof(msg), nullptr, msg);
+        gl::glGetProgramInfoLog(program, sizeof(msg), nullptr, msg);
         std::clog << msg << "\n";
     }
 
     return program;
 }
 
-shader::shader(const std::string& vertexShaderSourcePath, const std::string& fragmentShaderSourcePath)
+shader::shader(const std::string& vertexShaderSourcePath,
+               const std::string& fragmentShaderSourcePath,
+               const std::string& geom_shader_filename)
 {
     auto vshader = compile(gl::GL_VERTEX_SHADER, vertexShaderSourcePath);
     auto fshader = compile(gl::GL_FRAGMENT_SHADER, fragmentShaderSourcePath);
-    program = link(vshader, fshader);
+    auto gshader = (geom_shader_filename.empty())? 0: compile(gl::GL_GEOMETRY_SHADER,
+                                                              geom_shader_filename);
+
+    program = link(vshader, fshader, gshader);
+
+    gl::glDeleteShader(vshader);
+    gl::glDeleteShader(fshader);
+    gl::glDeleteShader(gshader);
 }
 
 
@@ -90,6 +100,13 @@ void shader::set_uniform(const std::string& name, int value)
     gl::glUniform1i(loc, value);
 }
 
+void shader::set_uniform(const std::string& name, float value)
+{
+    this->use();
+    int loc = gl::glGetUniformLocation(program, name.c_str());
+    gl::glUniform1f(loc, value);
+}
+
 
 void shader::set_uniform(const std::string& name, const glm::vec3& vec)
 {
@@ -103,4 +120,12 @@ void shader::set_uniform(const std::string& name, const glm::vec4& vec)
     this->use();
     int loc = gl::glGetUniformLocation(program, name.c_str());
     gl::glUniform4f(loc, vec.x, vec.y, vec.z, vec.w);
+}
+
+
+void shader::set_uniform(const std::string& name, const glm::ivec2& vec)
+{
+    this->use();
+    int loc = gl::glGetUniformLocation(program, name.c_str());
+    gl::glUniform2i(loc, vec.x, vec.y);
 }

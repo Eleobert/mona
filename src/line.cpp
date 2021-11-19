@@ -30,7 +30,7 @@ mona::line::line(const arma::fvec& x, const arma::fvec& y, glm::vec4 color): col
 
 auto mona::line::reset(const arma::fvec& x, const arma::fvec y) -> void
 {
-    assert(x.size() > 0);
+    assert(!x.empty());
     assert(x.size() == y.size());
     // TODO: this is not good, too much data copy
     auto vec = std::vector<line_renderer::vertex>(x.size() - 1);

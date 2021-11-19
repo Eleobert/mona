@@ -6,6 +6,7 @@
 #include "mona/targets/target.hpp"
 #include "mona/line.hpp"
 #include "mona/internal/shader.hpp"
+#include "mona/dots.hpp"
 
 #include <glm/vec2.hpp>
 #include <vector>
@@ -28,6 +29,7 @@ namespace mona
     private:
         axes::params par;
         std::vector<line> ls;
+        std::vector<mona::dots> ds;
 
     public:
         line_renderer port_boundary;
@@ -36,6 +38,7 @@ namespace mona
         axes(params p = params());
         auto draw(const camera& cam, mona::targets::target& t) -> void;
         auto submit(const line& ls) -> void;
+        auto submit(const dots& ls) -> void;
 
     };
 }
