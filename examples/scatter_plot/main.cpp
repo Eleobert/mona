@@ -7,40 +7,41 @@
 #include <mona/colors.hpp>
 
 
-auto fit(const arma::fvec& x, const arma::fvec& y) -> std::tuple<float, float>
+auto fit(const arma::fvec& x, const arma::fvec& y) -> arma::fvec
 {
     auto xx = x - arma::mean(x);
     auto yy = y - arma::mean(y);
     float b = arma::sum(xx % yy) / arma::sum(xx % xx);
     float a = arma::mean(y) - b * arma::mean(x);
-    return {a, b};
+    return a + b * x;
 }
 
 
-int main()
+auto random(arma::fvec x, float mean, float std)
 {
-    arma::fvec x = mona::linspace(-4, 4, 15);
-    arma::fvec y = x;
-
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::normal_distribution<> dis(0, 0.9);
+    std::normal_distribution<> dis(mean, std);
 
-    for(auto& e: y)
+    for(auto& e: x)
     {
         e += dis(gen);
     }
 
-    auto [a, b] = fit(x, y);
-    arma::fvec reg = a + b * x;
+    return x;
+}
+
+int main()
+{
+    arma::fvec x = mona::linspace(-4, 4, 15);
+    arma::fvec y = random(x, 0, 0.9);
 
     auto target = mona::targets::window();
-    auto vp = target.viewport();
     auto cam = mona::camera();
     auto axes = mona::axes();
 
-    auto dots = mona::dots(x, y);
-    auto line = mona::line(x, reg, mona::colors::tomato);
+    auto dots = mona::dots(x, y, mona::colors::tomato);
+    auto line = mona::line(x, fit(x, y), mona::colors::tomato);
 
     float delta = 0;
     while (target.active())
@@ -49,7 +50,7 @@ int main()
         axes.submit(line);
 
         cam = target.control_camera(cam);
-        axes.draw(cam, target); // we should not need camera here
+        axes.draw(cam, target);
         target.draw();
     }
 }

@@ -11,14 +11,13 @@ auto submit(std::vector<glm::vec3>& vertices, const arma::fvec& x, const arma::f
     std::random_device rd;
     std::mt19937 gen(rd());
     //TODO: fix this hack
-    std::uniform_real_distribution<> dis(0, 0.001f);
-    float f = dis(gen);
+    std::uniform_real_distribution<> dis(0.f, 0.001f);
+    double f = dis(gen);
 
     for(auto i = 0; i < x.size(); i++)
     {
         vertices.emplace_back(x[i], y[i], f+=0.001);
     }
-
 }
 
 
@@ -40,8 +39,9 @@ auto mona::dots::gen_buffer() -> void
 }
 
 
-mona::dots::dots(const arma::fvec& x, const arma::fvec& y): size(x.size()),
-    s("../../../res/shaders/lines.vert", "../../../res/shaders/dots.frag", "../../../res/shaders/dots.geom")
+mona::dots::dots(const arma::fvec& x, const arma::fvec& y, glm::vec4 color): size(x.size()),
+    s("../../../res/shaders/lines.vert", "../../../res/shaders/dots.frag",
+      "../../../res/shaders/dots.geom"), color(color)
 {
     span_area = {x.min(), y.min(), x.max(), y.max()};
     submit(vertices, x, y);
@@ -54,8 +54,8 @@ auto mona::dots::draw(const glm::mat4& mvp) -> void
     glGetIntegerv(GL_VIEWPORT, vp);
     s.use();
     s.set_uniform("vp_size", glm::ivec2(vp[2], vp[3]));
-    s.set_uniform("radius", 10.f);
-    s.set_uniform("color", colors::tomato / 255.f);
+    s.set_uniform("radius", radius);
+    s.set_uniform("color", color / 255.f);
     s.set_uniform("mvp", mvp);
     glBindVertexArray(vao);
     glDrawArrays(GL_POINTS, 0, vertices.size()*4);

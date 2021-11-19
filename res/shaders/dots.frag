@@ -12,18 +12,18 @@ in vec3 center;
 in vec2 n_radius;
 
 uniform float radius;
+uniform vec4 color;
 
 void main()
 {
     float inner_radius = length(n_radius) * 0.02;
-    vec3 c = vec3(255, 99, 51) / 255;
     vec2 dist = center.xy - coord.xy;
     dist /= n_radius;
 
     if(length(dist) < 1)
     {
         float alpha = smoothstep(1,  1 - 2/radius, length(dist));
-        FragColor = vec4(c, alpha);
+        FragColor = vec4(color.rgb, color.a * alpha);
     }
     else discard;
 }

@@ -21,11 +21,11 @@ namespace mona
         size_t size = 0;
         shader s;
         std::vector<glm::vec3> vertices;
+        glm::vec4 color;
+        float radius = 10;
 
     public:
-//        line(const arma::fvec& x, const arma::fvec& y, const arma::fvec& z,
-//             glm::vec4 color = colors::black);
-        dots(const arma::fvec& x, const arma::fvec& y);
+        dots(const arma::fvec& x, const arma::fvec& y, glm::vec4 color = colors::black);
 
         // returns the area that this series cover
         // this is to be used to calculate the axes tick values
@@ -38,7 +38,10 @@ namespace mona
         auto draw(const glm::mat4& mvp) -> void;
         auto gen_buffer() -> void;
 
-
+        auto set_radius(float r) -> void
+        {
+            radius = r;
+        }
     };
 };
 
