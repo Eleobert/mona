@@ -17,31 +17,33 @@ layout (max_vertices = 4) out;
 uniform float radius;
 uniform ivec2 vp_size;
 
+in vec4 v_color[];
 out vec3 center;
 out vec3 coord;
 out vec2 n_radius;
+out vec4 color;
 
 void main()
 {
+
+    color = v_color[0];
     n_radius = radius / vp_size;
     vec4 pos = gl_in[0].gl_Position;
     center = pos.xyz;
+
     gl_Position = vec4(pos.x - n_radius.x, pos.y + n_radius.y, pos.z, 1.0);
     coord = gl_Position.xyz;
     EmitVertex();
 
     gl_Position = vec4(pos.x + n_radius.x, pos.y + n_radius.y, pos.z, 1.0);
-    center = pos.xyz;
     coord = gl_Position.xyz;
     EmitVertex();
 
     gl_Position = vec4(pos.x - n_radius.x, pos.y - n_radius.y, pos.z, 1.0);
-    center = pos.xyz;
     coord = gl_Position.xyz;
     EmitVertex();
 
     gl_Position = vec4(pos.x + n_radius.x, pos.y - n_radius.y, pos.z, 1.0);
-    center = pos.xyz;
     coord = gl_Position.xyz;
     EmitVertex();
 

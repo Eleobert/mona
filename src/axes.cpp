@@ -108,6 +108,7 @@ auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::do
     return res;
 }
 
+
 auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 {
     t.begin_frame();
@@ -116,7 +117,6 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(prev_viewport));
 
     port_boundary.draw(glm::mat4(1.f), mona::colors::black, 1.f);
-    // TODO: viewport should come from target
     auto t_vp = t.viewport();
     trenderer.s.set_uniform("projection", glm::ortho(t_vp.x, t_vp.x + t_vp.w, t_vp.y,
                                                      t_vp.y + t_vp.h));
@@ -150,10 +150,10 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 
 auto mona::axes::submit(const mona::line& l) -> void
 {
-    auto ref = this->ls.emplace_back(l);
+    this->ls.emplace_back(l);
 }
 
 auto mona::axes::submit(const mona::dots& l) -> void
 {
-    auto ref = this->ds.emplace_back(l);
+    this->ds.emplace_back(l);
 }

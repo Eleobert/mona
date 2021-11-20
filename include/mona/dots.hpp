@@ -16,15 +16,16 @@ namespace mona
     {
     private:
 
+
         mona::rect span_area;
         uint vbo = 0, vao = 0;
-        size_t size = 0;
+        int size = 0;
         shader s;
         std::vector<glm::vec3> vertices;
-        glm::vec4 color;
         float radius = 10;
 
     public:
+        dots(const arma::fvec& x, const arma::fvec& y, const std::vector<glm::vec4>& colors);
         dots(const arma::fvec& x, const arma::fvec& y, glm::vec4 color = colors::black);
 
         // returns the area that this series cover
@@ -36,7 +37,6 @@ namespace mona
 
         //auto reset(const arma::fvec& x, const arma::fvec y) -> void;
         auto draw(const glm::mat4& mvp) -> void;
-        auto gen_buffer() -> void;
 
         auto set_radius(float r) -> void
         {

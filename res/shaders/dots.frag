@@ -12,7 +12,7 @@ in vec3 center;
 in vec2 n_radius;
 
 uniform float radius;
-uniform vec4 color;
+in vec4 color;
 
 void main()
 {
