@@ -22,7 +22,7 @@ auto add_ticks_guides(line_renderer& r, glm::vec2 a, glm::vec2 b, glm::vec3 w, i
     }
 }
 
-mona::axes::axes(params par): par(par), trenderer("../../../res/fonts/Quivira.otf", 15)
+mona::axes::axes(params par): par(par), trenderer("../../../res/fonts/Quivira.otf", 20)
 {
     auto x1 = par.padding_left - 1;
     auto x2 = 1 - par.padding_right;
@@ -51,7 +51,7 @@ auto draw_y_ticks(text_renderer& r, const mona::rect port, const arma::fvec& yy,
     {
         char buffer[50];
         sprintf(buffer, "%.3f", y);
-        r.render(buffer, {pos.x - pad, pos.y}, 1, {0, 0, 0}, {1, 0});
+        r.render(buffer, {pos.x - pad, pos.y}, 0.7, {0, 0, 0}, {1, 0});
         pos.y += step;
     }
 }
@@ -66,7 +66,7 @@ auto draw_x_ticks(text_renderer& r, const mona::rect port, const arma::fvec& xx,
     {
         char buffer[50];
         sprintf(buffer, "%.3f", y);
-        r.render(buffer, {pos.x, pos.y - pad}, 1, {0, 0, 0}, {0, 1});
+        r.render(buffer, {pos.x, pos.y - pad}, 0.7, {0, 0, 0}, {0, 1});
         pos.x += step;
     }
 }

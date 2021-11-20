@@ -15,7 +15,7 @@ auto linspace(text_renderer& trenderer, glm::vec3 a, glm::vec3 b,
         char buffer[50];
         sprintf(buffer, "%.3f", start);
         const auto size = trenderer.size(buffer, 1);
-        trenderer.render(buffer, p, 1, {0, 0, 0}, font_origin);
+        trenderer.render(buffer, p, 0.7, {0, 0, 0}, font_origin);
 
         a += coord_step;
         start += value_step;
@@ -25,7 +25,7 @@ auto linspace(text_renderer& trenderer, glm::vec3 a, glm::vec3 b,
 #include <iostream>
 
 mona::axes3::axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n): x(x), y(y), z(z), n(n),
-    trenderer("../../../res/fonts/Quivira.otf", 13)
+    trenderer("../../../res/fonts/Quivira.otf", 20)
 {
     assert(n > 0);
     bottom = grid({-1,-1,-1}, {-1,-1, 1}, { 1,-1,-1}, { 1,-1, 1}, n);
