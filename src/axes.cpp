@@ -7,38 +7,25 @@
 
 #include <limits>
 #include <algorithm>
+#include <span>
 
 using namespace gl;
 
 
-auto add_ticks_guides(line_renderer& r, glm::vec2 a, glm::vec2 b, glm::vec3 w, int n)
+// return the plot area viewport
+auto get_viewport(const mona::axes::params& par, const mona::rect& target_vp) -> mona::rect
 {
-    auto pos = glm::vec3(a, 0.f);
-    auto step = glm::vec3((b - a) / (n - 1.f), 0.f);
-    for(auto i = 0u; i < n; i++)
-    {
-        r.submit(pos, pos - w);
-        pos += step;
-    }
+    auto x = target_vp.x + par.padding_left * target_vp.w / 2.f;
+    auto y = target_vp.y + par.padding_down * target_vp.h / 2.f;
+    auto w = (2 - (par.padding_left + par.padding_right)) * target_vp.w / 2.f;
+    auto h = (2 - (par.padding_up + par.padding_down)) * target_vp.h / 2.f;
+    return {x, y, w, h};
 }
+
 
 mona::axes::axes(params par): par(par), trenderer("../../../res/fonts/Quivira.otf", 20)
 {
-    auto x1 = par.padding_left - 1;
-    auto x2 = 1 - par.padding_right;
-    auto y1 = 1 - par.padding_up;
-    auto y2 = par.padding_down - 1;
 
-    port_boundary.submit({x1, y1, 0}, {x2, y1, 0});
-    port_boundary.submit({x2, y1, 0}, {x2, y2, 0});
-    port_boundary.submit({x2, y2, 0}, {x1, y2, 0});
-    port_boundary.submit({x1, y2, 0}, {x1, y1, 0});
-
-    constexpr auto w = 0.03;
-    add_ticks_guides(port_boundary, {x1, y1}, {x1, y2}, {w, 0, 0}, par.n_bins);
-    add_ticks_guides(port_boundary, {x1, y2}, {x2, y2}, {0, w, 0}, par.n_bins);
-
-    port_boundary.gen_buffer();
 }
 
 
@@ -72,17 +59,6 @@ auto draw_x_ticks(text_renderer& r, const mona::rect port, const arma::fvec& xx,
 }
 
 
-// return the plot area viewport
-auto get_viewport(const mona::axes::params& par, const mona::rect& target_vp) -> mona::rect
-{
-    auto x = target_vp.x + par.padding_left * target_vp.w / 2.f;
-    auto y = target_vp.y + par.padding_down * target_vp.h / 2.f;
-    auto w = (2 - (par.padding_left + par.padding_right)) * target_vp.w / 2.f;
-    auto h = (2 - (par.padding_up + par.padding_down)) * target_vp.h / 2.f;
-    return {x, y, w, h};
-}
-
-
 auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::dots>& ds)
 {
     constexpr auto inf = std::numeric_limits<float>::infinity();
@@ -108,6 +84,55 @@ auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::do
     return res;
 }
 
+auto add_tick_guides(std::span<float> sp)
+{
+
+}
+
+auto update_port(mona::line& l, mona::rect vp, const mona::axes::params& par)
+{
+    auto x1 = vp.x;
+    auto x2 = vp.x + vp.w;
+    auto y1 = vp.y;
+    auto y2 = vp.y + vp.h;
+
+    auto port_x = arma::fvec(8 + par.n_bins * 4);
+    auto port_y = arma::fvec(8 + par.n_bins * 4);
+    port_x.subvec(0, 7) = arma::fvec({x1, x2, x2, x2, x2, x1, x1, x1});
+    port_y.subvec(0, 7) = arma::fvec({y1, y1, y1, y2, y2, y2, y2, y1});
+
+    auto x_step = (x2 - x1) / (par.n_bins - 1.f);
+    auto y_step = (y2 - y1) / (par.n_bins - 1.f);
+
+    for(auto i = 0; i < par.n_bins; i++)
+    {
+        port_x[2 * i + 8] = x1;
+        port_x[2 * i + 9] = x1 - 10;
+        port_y[2 * i + 8] = y1 + y_step * i;
+        port_y[2 * i + 9] = y1 + y_step * i;
+    }
+
+    auto o = 2 * par.n_bins + 8;
+    for(auto i = 0; i < par.n_bins; i++)
+    {
+        port_y[2 * i + o + 0] = y1;
+        port_y[2 * i + o + 1] = y1 - 10;
+        port_x[2 * i + o + 0] = x1 + x_step * i;
+        port_x[2 * i + o + 1] = x1 + x_step * i;
+    }
+
+    if(l.empty())
+    {
+        // line is being created by the first time
+        l = mona::line(port_x, port_y);
+    }
+    else
+    {
+        l.reset(port_x, port_y);
+    }
+    l.set_strip(false);
+}
+
 
 auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 {
@@ -116,12 +141,18 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
     glm::ivec4 prev_viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(prev_viewport));
 
-    port_boundary.draw(glm::mat4(1.f), mona::colors::black, 1.f);
-    auto t_vp = t.viewport();
-    trenderer.s.set_uniform("projection", glm::ortho(t_vp.x, t_vp.x + t_vp.w, t_vp.y,
-                                                     t_vp.y + t_vp.h));
+    auto t_vp = t.viewport(); // target viewport
+    auto vp = get_viewport(par, t.viewport()); // plot viewport
 
-    auto vp = get_viewport(par, t.viewport());
+    if(t_vp != prev_target_viewport || port.empty())
+    {
+        update_port(port, vp, par);
+    }
+
+    auto t_ortho = glm::ortho(t_vp.x, t_vp.x + t_vp.w, t_vp.y, t_vp.y + t_vp.h);
+    port.draw(t_ortho);
+    trenderer.s.set_uniform("projection", t_ortho);
+
     auto span = get_plot_span(ls, ds);
     draw_x_ticks(trenderer, vp, mona::linspace(span.x, span.w, par.n_bins));
     draw_y_ticks(trenderer, vp, mona::linspace(span.y, span.h, par.n_bins));

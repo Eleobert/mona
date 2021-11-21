@@ -49,7 +49,7 @@ auto add_debug_callback()
         if(severity > GL_DEBUG_SEVERITY_NOTIFICATION)
         {
             std::cerr << message << '\n';
-            assert(false);
+            //assert(false);
         }
     }, nullptr);
 }

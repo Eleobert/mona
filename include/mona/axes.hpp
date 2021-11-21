@@ -30,9 +30,10 @@ namespace mona
         axes::params par;
         std::vector<line> ls;
         std::vector<mona::dots> ds;
+        mona::rect prev_target_viewport;
 
     public:
-        line_renderer port_boundary;
+        line port;
         text_renderer trenderer;
 
         axes(params p = params());

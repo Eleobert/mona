@@ -21,6 +21,7 @@ public:
     {
         process(a, b, c, d, n);
         process(a, c, b, d, n);
+        renderer.set_strip(false);
     }
 
     /**
@@ -37,7 +38,8 @@ public:
         auto down = b;
         for(auto i = 0; i < n; i++)
         {
-            renderer.submit(top, down);
+            renderer.submit(top);
+            renderer.submit(down);
             top += top_step;
             down += down_step;
         }
