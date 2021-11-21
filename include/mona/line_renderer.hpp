@@ -10,7 +10,7 @@ class line_renderer
 {
 private:
     size_t fixed_size;
-    shader s;
+    mutable shader s;
     std::vector<glm::vec3> vertices;
     uint32_t vao = 0;
     uint32_t vbo = 0;
@@ -26,7 +26,7 @@ public:
     }
 
     auto gen_buffer() -> void;
-    auto draw(const glm::mat4& mvp, glm::vec4 color, float thickness) -> void;
+    auto draw(const glm::mat4& mvp, glm::vec4 color, float thickness) const -> void;
     auto reset(const std::vector<glm::vec3>& vertices) -> void;
     auto size() -> size_t {return vertices.size();}
     auto set_strip(bool strip) -> void;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mona/rect.hpp>
+#include <mona/series.hpp>
 
 #include "line_renderer.hpp"
 #include "colors.hpp"
@@ -12,15 +13,13 @@
 
 namespace mona
 {
-    class dots
+    class dots: series
     {
     private:
-
-
         mona::rect span_area;
         uint vbo = 0, vao = 0;
         int size = 0;
-        shader s;
+        mutable shader s;
         std::vector<glm::vec3> vertices;
         float radius = 10;
 
@@ -30,13 +29,13 @@ namespace mona
 
         // returns the area that this series cover
         // this is to be used to calculate the axes tick values
-        auto span() const
+        auto span() const -> mona::rect override
         {
             return span_area;
         }
 
         //auto reset(const arma::fvec& x, const arma::fvec y) -> void;
-        auto draw(const glm::mat4& mvp) -> void;
+        auto draw(const glm::mat4& mvp) const -> void override;
 
         auto set_radius(float r) -> void
         {

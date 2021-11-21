@@ -34,7 +34,7 @@ void line_renderer::gen_buffer()
 }
 
 
-void line_renderer::draw(const glm::mat4& mvp, glm::vec4 color, float thickness)
+void line_renderer::draw(const glm::mat4& mvp, glm::vec4 color, float thickness) const
 {
     glLineWidth(thickness);
     s.use();

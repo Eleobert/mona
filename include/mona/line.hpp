@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mona/rect.hpp>
+#include <mona/series.hpp>
 
 #include "line_renderer.hpp"
 #include "colors.hpp"
@@ -10,7 +11,7 @@
 
 namespace mona
 {
-    class line
+    class line: public series
     {
         line_renderer renderer;
         mona::rect span_area;
@@ -26,12 +27,12 @@ namespace mona
 
         // returns the area that this series cover
         // this is to be used to calculate the axes tick values
-        auto span() const
+        auto span() const -> mona::rect override
         {
             return span_area;
         }
 
-        auto draw(const glm::mat4& mvp)
+        auto draw(const glm::mat4& mvp) const -> void override
         {
             renderer.draw(mvp, color, 1.5f);
         }
@@ -45,6 +46,5 @@ namespace mona
         {
             renderer.set_strip(strip);
         }
-
     };
 };

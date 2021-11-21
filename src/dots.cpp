@@ -80,7 +80,7 @@ mona::dots::dots(const arma::fvec& x, const arma::fvec& y, const std::vector<glm
 }
 
 
-auto mona::dots::draw(const glm::mat4& mvp) -> void
+auto mona::dots::draw(const glm::mat4& mvp) const -> void
 {
     int vp[4];
     glGetIntegerv(GL_VIEWPORT, vp);
