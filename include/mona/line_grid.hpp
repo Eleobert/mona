@@ -3,7 +3,7 @@
 #include "line_renderer.hpp"
 #include "camera.hpp"
 
-class grid
+class line_grid
 {
 
     int n;
@@ -15,9 +15,9 @@ public:
     glm::vec3 c;
     glm::vec3 d;
 
-    grid(): a(0), b(0), c(0), d(0){}
+    line_grid(): a(0), b(0), c(0), d(0){}
 
-    grid(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d, int n): a(a), b(b), c(c), d(d)
+    line_grid(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d, int n): a(a), b(b), c(c), d(d)
     {
         process(a, b, c, d, n);
         process(a, c, b, d, n);

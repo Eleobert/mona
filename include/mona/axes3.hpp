@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mona/grid.hpp"
+#include "mona/line_grid.hpp"
 #include "mona/text_renderer.hpp"
 #include "mona/camera.hpp"
 #include "mona/targets/target.hpp"
@@ -21,12 +21,12 @@ namespace mona
 
         glm::vec2 x, y, z;
         int n;
-        grid bottom;
-        grid up;
-        grid left;
-        grid right;
-        grid front;
-        grid back;
+        line_grid bottom;
+        line_grid up;
+        line_grid left;
+        line_grid right;
+        line_grid front;
+        line_grid back;
 
         std::vector<mona::surface_mesh> meshes;
     public:

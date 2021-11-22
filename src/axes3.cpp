@@ -28,17 +28,17 @@ mona::axes3::axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n): x(x), y(y), z(
     trenderer("../../../res/fonts/Quivira.otf", 20)
 {
     assert(n > 0);
-    bottom = grid({-1,-1,-1}, {-1,-1, 1}, { 1,-1,-1}, { 1,-1, 1}, n);
-    up     = grid({ 1, 1,-1}, { 1, 1, 1}, {-1, 1,-1}, {-1, 1, 1}, n);
-    left   = grid({-1, 1, 1}, {-1,-1, 1}, {-1, 1,-1}, {-1,-1,-1}, n);
-    right  = grid({ 1, 1,-1}, { 1,-1,-1}, { 1, 1, 1}, { 1,-1, 1}, n);
-    front  = grid({ 1,-1,-1}, { 1, 1,-1}, {-1,-1,-1}, {-1, 1,-1}, n);
-    back   = grid({-1,-1, 1}, {-1, 1, 1}, { 1,-1, 1}, { 1, 1, 1}, n);
+    bottom = line_grid({-1, -1, -1}, {-1, -1, 1}, {1, -1, -1}, {1, -1, 1}, n);
+    up     = line_grid({1, 1, -1}, {1, 1, 1}, {-1, 1, -1}, {-1, 1, 1}, n);
+    left   = line_grid({-1, 1, 1}, {-1, -1, 1}, {-1, 1, -1}, {-1, -1, -1}, n);
+    right  = line_grid({1, 1, -1}, {1, -1, -1}, {1, 1, 1}, {1, -1, 1}, n);
+    front  = line_grid({1, -1, -1}, {1, 1, -1}, {-1, -1, -1}, {-1, 1, -1}, n);
+    back   = line_grid({-1, -1, 1}, {-1, 1, 1}, {1, -1, 1}, {1, 1, 1}, n);
 
     orthogonal_proj = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
 }
 
-auto draw_grid(grid& g, glm::mat4 mvpersp, glm::mat3 mvortho) -> bool
+auto draw_grid(line_grid& g, glm::mat4 mvpersp, glm::mat3 mvortho) -> bool
 {
     auto a = mvortho * g.b - mvortho * g.a;
     auto b = mvortho * g.c - mvortho * g.a;
