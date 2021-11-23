@@ -31,36 +31,50 @@ auto random(arma::fvec x, float mean, float std)
     return x;
 }
 
-int main()
+
+auto get_dots()
 {
     arma::fvec x = mona::linspace(-4, 4, 15);
     arma::fvec y = random(x, 0, 0.9);
+    return mona::dots(x, y, mona::colors::tomato);
+}
 
-    auto win = mona::targets::window();
-    auto view = mona::grid(win.area(), 3, 3);
-    auto cam = mona::camera();
-    auto axes = mona::axes();
+auto get_line()
+{
+    auto f = [](double x)
+    {
+        return std::sin(x);
+    };
 
-    auto dots = mona::dots(x, y, mona::colors::tomato);
-    auto line = mona::line(x, fit(x, y), mona::colors::tomato);
+    arma::fvec x = mona::linspace(-4, 4, 50);
+    arma::fvec y = x;
+    y.transform(f);
+
+    return mona::line(x, y, mona::colors::midnight_blue);
+}
+
+int main()
+{
+    auto win  = mona::targets::window();
+    auto view = mona::grid(2, 2);
+    auto cam  = mona::camera();
+    auto axes_dots = mona::axes();
+    auto axes_line = mona::axes();
+
+    auto dots = get_dots();
+    auto line = get_line();
 
     while (win.active())
     {
-        axes.submit(dots);
-        axes.submit(line);
+        axes_dots.submit(dots);
+        axes_line.submit(line);
 
-        cam = win.control_camera(cam);
-        axes.draw(cam, view(0, 0));
-        axes.draw(cam, view(0, 1));
-        axes.draw(cam, view(1, 0));
-        axes.draw(cam, view(1, 1));
+        view(0, 0).submit(axes_dots);
+        view(0, 1).submit(axes_line);
+        view(1, 0).submit(axes_dots);
+        view(1, 1).submit(axes_line);
 
+        win.submit(view);
         win.draw();
-
-//        view(0, 0).submit(axes);
-//        view(0, 1).submit(axes);
-//        view(1, 0).submit(axes);
-//        view(1, 1).submit(axes);
-//        win.submit(view);
     }
 }

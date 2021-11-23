@@ -120,11 +120,18 @@ auto window::active() -> bool
 
 auto window::draw() -> void
 {
-    glfwPollEvents();
-    glfwSwapBuffers(handle);
-
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if(src)
+    {
+        src->draw(area());
+        src = mona::exchange(nullptr, src);
+    }
+
+
+    glfwPollEvents();
+    glfwSwapBuffers(handle);
 }
 
 
@@ -133,4 +140,9 @@ auto window::area() -> mona::rect
     int w, h;
     glfwGetWindowSize(handle, &w, &h);
     return {0.f, 0.f, static_cast<float>(w), static_cast<float>(h)};
+}
+
+auto window::submit(const mona::source& src) -> void
+{
+    this->src = mona::exchange(&src, this->src);
 }

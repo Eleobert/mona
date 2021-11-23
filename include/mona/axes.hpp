@@ -7,13 +7,14 @@
 #include "mona/line.hpp"
 #include "mona/internal/shader.hpp"
 #include "mona/dots.hpp"
+#include <mona/source.hpp>
 
 #include <glm/vec2.hpp>
 #include <vector>
 
 namespace mona
 {
-    class axes
+    class axes: public source
     {
     public:
         struct params
@@ -28,16 +29,17 @@ namespace mona
 
     private:
         axes::params par;
-        std::vector<line> ls;
-        std::vector<mona::dots> ds;
+        mutable std::vector<line> ls;
+        mutable std::vector<mona::dots> ds;
         mona::rect prev_target_viewport;
+        // TODO: or maybe draw should not be const
+        mutable line port;
+        mutable text_renderer trenderer;
 
     public:
-        line port;
-        text_renderer trenderer;
 
         axes(params p = params());
-        auto draw(const camera& cam, mona::targets::target& t) -> void;
+        auto draw(mona::rect r) const -> void;
         auto submit(const line& ls) -> void;
         auto submit(const dots& ls) -> void;
 

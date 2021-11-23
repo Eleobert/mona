@@ -2,6 +2,7 @@
 
 #include "target.hpp"
 #include "mona/colors.hpp"
+#include <mona/source.hpp>
 
 #include <string>
 #include <glm/vec2.hpp>
@@ -14,6 +15,7 @@ namespace mona::targets
     {
         glm::vec2 mouse_pos;
         GLFWwindow* handle = nullptr;
+        const mona::source* src = nullptr;
 
     public:
 
@@ -31,7 +33,9 @@ namespace mona::targets
         auto active() -> bool override;
         auto begin_frame() -> void override;
         auto end_frame() -> void override;
-        auto draw() -> void override;
         auto area() -> mona::rect  override;
+
+        auto draw() -> void;
+        auto submit(const mona::source& src) -> void;
     };
 }

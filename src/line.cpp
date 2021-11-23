@@ -56,7 +56,7 @@ auto mona::line::reset(const arma::fvec& x, const arma::fvec& y) -> void
 }
 
 
-auto mona::line::empty() -> bool
+auto mona::line::empty() const -> bool
 {
     return not renderer.size();
 }

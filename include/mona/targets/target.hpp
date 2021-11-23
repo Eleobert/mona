@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mona/camera.hpp"
+#include <mona/camera.hpp>
 #include <mona/rect.hpp>
 
 namespace mona::targets
@@ -16,14 +16,12 @@ namespace mona::targets
         {
             return camera;
         }
-        
+
         virtual auto begin_frame() -> void = 0;
         
         virtual auto end_frame() -> void = 0;
 
         virtual auto active() -> bool = 0;
-
-        virtual auto draw() -> void = 0;
 
         virtual auto area() -> mona::rect = 0;
     };

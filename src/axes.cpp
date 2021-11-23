@@ -141,14 +141,12 @@ auto update_port(mona::line& l, mona::rect vp, const mona::axes::params& par)
 }
 
 
-auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
+auto mona::axes::draw(mona::rect t_vp) const -> void
 {
-    t.begin_frame();
 
     glm::ivec4 prev_viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(prev_viewport));
 
-    auto t_vp = t.area(); // target viewport
     auto vp = get_viewport(par, t_vp); // plot viewport
 
     if(t_vp != prev_target_viewport || port.empty())
@@ -180,7 +178,6 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 
     glViewport(prev_viewport.x, prev_viewport.y, prev_viewport.z, prev_viewport.w);
 
-    t.end_frame();
     ls.clear();
     ds.clear();
 }

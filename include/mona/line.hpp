@@ -40,7 +40,7 @@ namespace mona
         auto reset(const arma::fvec& x, const arma::fvec& y) -> void;
 
         // TODO: I am not sure if this is to stay
-        auto empty() -> bool;
+        auto empty() const -> bool;
 
         auto set_strip(bool strip) -> void
         {

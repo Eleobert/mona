@@ -28,6 +28,6 @@ public:
     auto gen_buffer() -> void;
     auto draw(const glm::mat4& mvp, glm::vec4 color, float thickness) const -> void;
     auto reset(const std::vector<glm::vec3>& vertices) -> void;
-    auto size() -> size_t {return vertices.size();}
+    auto size() const -> size_t {return vertices.size();}
     auto set_strip(bool strip) -> void;
 };

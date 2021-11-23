@@ -28,7 +28,7 @@ add_library(mona SHARED
         src/text_renderer.cpp
         src/line_renderer.cpp include/mona/axes.hpp src/axes.cpp src/line.cpp
         include/mona/dots.hpp
-        src/dots.cpp src/target/viewport.cpp)
+        src/dots.cpp src/target/viewport.cpp include/mona/source.hpp)
 
 target_compile_definitions(mona PUBLIC ARMA_DONT_USE_HDF5)
 target_compile_features(mona PRIVATE cxx_std_20)
