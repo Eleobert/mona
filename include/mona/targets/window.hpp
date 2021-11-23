@@ -32,6 +32,6 @@ namespace mona::targets
         auto begin_frame() -> void override;
         auto end_frame() -> void override;
         auto draw() -> void override;
-        auto viewport() -> mona::rect  override;
+        auto area() -> mona::rect  override;
     };
 }

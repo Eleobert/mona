@@ -128,7 +128,7 @@ auto window::draw() -> void
 }
 
 
-auto window::viewport() -> mona::rect
+auto window::area() -> mona::rect
 {
     int w, h;
     glfwGetWindowSize(handle, &w, &h);

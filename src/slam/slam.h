@@ -2137,4 +2137,7 @@ typedef unsigned int GLhandleARB;
      extern void  (APIENTRY *glWaitSync) (GLsync  sync, GLbitfield  flags, GLuint64  timeout);
 
 }
+
+using namespace gl;
+
 #undef APIENTRY

@@ -59,7 +59,7 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
 {
     t.begin_frame();
 
-    auto vp = t.viewport();
+    auto vp = t.area();
     auto perspective_proj =  glm::perspective(glm::radians(45.0f), vp.w/vp.h, 0.1f, 100.0f);
 
     auto mvporth = orthogonal_proj * cam.view();

@@ -25,6 +25,6 @@ namespace mona::targets
 
         virtual auto draw() -> void = 0;
 
-        virtual auto viewport() -> mona::rect = 0;
+        virtual auto area() -> mona::rect = 0;
     };
 }

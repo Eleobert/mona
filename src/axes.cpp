@@ -60,6 +60,7 @@ auto draw_x_ticks(text_renderer& r, const mona::rect port, const arma::fvec& xx,
 
 
 auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::dots>& ds)
+    -> mona::rect
 {
     constexpr auto inf = std::numeric_limits<float>::infinity();
     auto res = mona::rect{inf, inf, -inf, -inf};
@@ -81,6 +82,12 @@ auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::do
         res.y = std::min(res.y, span.y);
         res.h = std::max(res.h, span.h);
     }
+
+    if(res == mona::rect{inf, inf, -inf, -inf})
+    {
+        return {0, 0, 1, 1};
+    }
+
     return res;
 }
 
@@ -141,8 +148,8 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
     glm::ivec4 prev_viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(prev_viewport));
 
-    auto t_vp = t.viewport(); // target viewport
-    auto vp = get_viewport(par, t.viewport()); // plot viewport
+    auto t_vp = t.area(); // target viewport
+    auto vp = get_viewport(par, t_vp); // plot viewport
 
     if(t_vp != prev_target_viewport || port.empty())
     {
@@ -175,6 +182,7 @@ auto mona::axes::draw(const camera& cam, mona::targets::target& t) -> void
 
     t.end_frame();
     ls.clear();
+    ds.clear();
 }
 
 
@@ -184,7 +192,7 @@ auto mona::axes::submit(const mona::line& l) -> void
     this->ls.emplace_back(l);
 }
 
-auto mona::axes::submit(const mona::dots& l) -> void
+auto mona::axes::submit(const mona::dots& d) -> void
 {
-    this->ds.emplace_back(l);
+    this->ds.emplace_back(d);
 }
