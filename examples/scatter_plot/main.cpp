@@ -1,7 +1,7 @@
 #include <armadillo>
 
 #include <mona/utility.hpp>
-#include <mona/line.hpp> // should be called line instead
+#include <mona/line.hpp>
 #include <mona/targets/window.hpp>
 #include <mona/axes.hpp>
 #include <mona/colors.hpp>
@@ -31,6 +31,7 @@ auto random(arma::fvec x, float mean, float std)
     return x;
 }
 
+
 int main()
 {
     arma::fvec x = mona::linspace(-4, 4, 15);
@@ -50,7 +51,7 @@ int main()
         axes.submit(line);
 
         cam = target.control_camera(cam);
-        axes.draw(cam, target);
+        target.submit(axes);
         target.draw();
     }
 }

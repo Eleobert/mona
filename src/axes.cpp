@@ -91,10 +91,6 @@ auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::do
     return res;
 }
 
-auto add_tick_guides(std::span<float> sp)
-{
-
-}
 
 auto update_port(mona::line& l, mona::rect vp, const mona::axes::params& par)
 {

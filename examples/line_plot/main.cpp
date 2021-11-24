@@ -1,7 +1,7 @@
 #include <armadillo>
 
 #include <mona/utility.hpp>
-#include <mona/line.hpp> // should be called line instead
+#include <mona/line.hpp>
 #include <mona/targets/window.hpp>
 #include <mona/axes.hpp>
 #include <mona/colors.hpp>
@@ -43,7 +43,7 @@ int main()
         line1.color.b = 255.f * std::sin(glfwGetTime()) * std::cos(glfwGetTime()) ;
 
         cam = target.control_camera(cam);
-        axes.draw(cam, target); // we should not need camera here
+        target.submit(axes);
         target.draw();
     }
 }
