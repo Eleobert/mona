@@ -1,7 +1,7 @@
 #pragma once
 
 #include <mona/rect.hpp>
-#include <mona/series.hpp>
+#include <mona/mesh.hpp>
 
 #include "line_renderer.hpp"
 #include "colors.hpp"
@@ -13,7 +13,7 @@
 
 namespace mona
 {
-    class dots: series
+    class dots: public mesh
     {
     private:
         mona::rect span_area;

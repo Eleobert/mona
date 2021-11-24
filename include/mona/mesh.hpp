@@ -1,13 +1,13 @@
 #pragma once
 
 #include <mona/rect.hpp>
+#include <mona/resource.hpp>
 
 #include <glm/matrix.hpp>
 
-
 namespace mona
 {
-    class series
+    class mesh: public resource
     {
     public:
         // returns the area that this series wants to be covered

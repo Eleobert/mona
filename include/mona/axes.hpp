@@ -20,17 +20,17 @@ namespace mona
         struct params
         {
             params() { };
-            float padding_up    = 0.25f;
+            float padding_up    = 0.15f;
             float padding_down  = 0.25f;
-            float padding_left  = 0.30f;
-            float padding_right = 0.25f;
+            float padding_left  = 0.25f;
+            float padding_right = 0.15f;
             int n_bins = 6;
         };
 
     private:
+        // TODO:draw should not be mutable
         axes::params par;
-        mutable std::vector<line> ls;
-        mutable std::vector<mona::dots> ds;
+        mutable std::vector<const mesh*> ss;
         mona::rect prev_target_viewport;
         // TODO: or maybe draw should not be const
         mutable line port;
@@ -40,8 +40,7 @@ namespace mona
 
         axes(params p = params());
         auto draw(mona::rect r) const -> void;
-        auto submit(const line& ls) -> void;
-        auto submit(const dots& ls) -> void;
+        auto submit(const mesh& s) -> void;
 
     };
 }

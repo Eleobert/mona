@@ -59,24 +59,15 @@ auto draw_x_ticks(text_renderer& r, const mona::rect port, const arma::fvec& xx,
 }
 
 
-auto get_plot_span(const std::vector<mona::line>& ls, const std::vector<mona::dots>& ds)
+auto get_plot_span(const std::vector<const mona::mesh*>& ss)
     -> mona::rect
 {
     constexpr auto inf = std::numeric_limits<float>::infinity();
     auto res = mona::rect{inf, inf, -inf, -inf};
 
-    for(auto& l: ls)
+    for(auto s: ss)
     {
-        auto span = l.span();
-        res.x = std::min(res.x, span.x);
-        res.w = std::max(res.w, span.w);
-        res.y = std::min(res.y, span.y);
-        res.h = std::max(res.h, span.h);
-    }
-
-    for(auto& d: ds)
-    {
-        auto span = d.span();
+        auto span = s->span();
         res.x = std::min(res.x, span.x);
         res.w = std::max(res.w, span.w);
         res.y = std::min(res.y, span.y);
@@ -154,7 +145,7 @@ auto mona::axes::draw(mona::rect t_vp) const -> void
     port.draw(t_ortho);
     trenderer.s.set_uniform("projection", t_ortho);
 
-    auto span = get_plot_span(ls, ds);
+    auto span = get_plot_span(ss);
     draw_x_ticks(trenderer, vp, mona::linspace(span.x, span.w, par.n_bins));
     draw_y_ticks(trenderer, vp, mona::linspace(span.y, span.h, par.n_bins));
 
@@ -162,30 +153,20 @@ auto mona::axes::draw(mona::rect t_vp) const -> void
 
     auto ortho = glm::ortho(span.x, span.w, span.y, span.h);
 
-    for(auto& l: ls)
+    for(auto& s: ss)
     {
-       l.draw(ortho);
-    }
-
-    for(auto& d: ds)
-    {
-        d.draw(ortho);
+       s->draw(ortho);
+       s->release();
     }
 
     glViewport(prev_viewport.x, prev_viewport.y, prev_viewport.z, prev_viewport.w);
 
-    ls.clear();
-    ds.clear();
+    ss.clear();
 }
 
 
-
-auto mona::axes::submit(const mona::line& l) -> void
+auto mona::axes::submit(const mesh& s) -> void
 {
-    this->ls.emplace_back(l);
-}
-
-auto mona::axes::submit(const mona::dots& d) -> void
-{
-    this->ds.emplace_back(d);
+    s.hold();
+    ss.emplace_back(&s);
 }
