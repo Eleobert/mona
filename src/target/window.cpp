@@ -69,34 +69,6 @@ window::~window()
     glfwTerminate();
 }
 
-auto window::control_camera(mona::camera cam) -> mona::camera
-{
-    constexpr float scroll_sens = 0.08;
-    constexpr float mov_sens = 0.08;
-    constexpr float min_dist = 0.1f;
-
-    const auto pos = get_mouse_pos(handle);
-
-    auto [cam_dist, cam_yaw, cam_pitch] = cam.pos();
-
-     if(glfwGetMouseButton(handle, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-     {
-         const auto delta = mouse_pos - pos;
-
-         auto yaw   = -delta.x * mov_sens;
-         auto pitch = -delta.y * mov_sens;
-         pitch = std::abs(cam_pitch + pitch) < 89.f? pitch: 0;
-         cam.rotate(yaw, pitch);
-     }
-     mouse_pos = pos;
-
-    auto dist_inc = get_mouse_scroll(handle) * scroll_sens;
-    dist_inc = dist_inc + cam_dist < min_dist? 0: dist_inc;
-    cam.zoom(dist_inc);
-
-    return cam;
-}
-
 
 auto window::begin_frame() -> void
 {
@@ -147,4 +119,9 @@ auto window::area() -> mona::rect
 auto window::submit(const mona::source& src) -> void
 {
     this->src = mona::exchange(&src, this->src);
+}
+
+auto window::get_camera_control() -> camera_control
+{
+    return camera_control(handle);
 }

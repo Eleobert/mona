@@ -24,8 +24,9 @@ namespace mona
 
         auto rotate(float yaw, float pitch)
         {
-            this->yaw += yaw;
+            pitch = std::abs(this->pitch + pitch) < 89.f? pitch: 0;
             this->pitch += pitch;
+            this->yaw += yaw;
         }
 
         auto pos() -> std::tuple<float, float, float>

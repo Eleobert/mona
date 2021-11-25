@@ -57,10 +57,14 @@ auto draw_grid(line_grid& g, glm::mat4 mvpersp, glm::mat3 mvortho) -> bool
 
 auto mona::axes3::draw(mona::rect vp) const -> void
 {
+    auto c = cam_control(vp);
+    cam.zoom(c.zoom);
+    cam.rotate(c.yaw, c.pitch);
+
     auto perspective_proj =  glm::perspective(glm::radians(45.0f), vp.w/vp.h, 0.1f, 100.0f);
 
-    auto mvporth = orthogonal_proj * glm::mat4(1.f);
-    auto mvpersp = perspective_proj * glm::mat4(1.f);
+    auto mvporth = orthogonal_proj * cam.view();
+    auto mvpersp = perspective_proj * cam.view();
     auto visible_bottom = draw_grid(bottom, mvpersp, mvporth);
     auto visible_up     = draw_grid(up, mvpersp, mvporth);
     auto visible_left   = draw_grid(left, mvpersp, mvporth);
@@ -132,5 +136,11 @@ auto mona::axes3::draw(mona::rect vp) const -> void
 auto mona::axes3::submit(const mona::surface_mesh& mesh) -> void
 {
     meshes.push_back(mesh);
+}
+
+
+auto mona::axes3::set_camera_control(const mona::camera_control& control) -> void
+{
+    cam_control = control;
 }
 
