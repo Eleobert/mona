@@ -11,21 +11,17 @@ namespace mona::plot
 {
     auto surface(const arma::fmat& x, const arma::fmat& y, const arma::fmat& z) -> void
     {
-        auto target = mona::targets::window();
-        auto [x0, y0, w, h] = target.area();
+        auto win = mona::targets::window();
         auto cam  = mona::camera();
         auto mesh = mona::surface_mesh(x, y, z);
         auto axes = mona::axes3({x.min(), x.max()}, {y.min(), y.max()}, {z.min(), z.max()}, 5);
-        // auto picker = mona::picker(mesh);
+        //axes.set_camera_control(win.camera_control());
 
-        while (target.active())
+        while (win.active())
         {
-            cam = target.control_camera(cam);
-
             axes.submit(mesh);
-            axes.draw(cam, target);
-
-            target.draw();
+            win.submit(axes);
+            win.draw();
         }
     }
 };

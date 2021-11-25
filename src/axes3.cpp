@@ -55,15 +55,12 @@ auto draw_grid(line_grid& g, glm::mat4 mvpersp, glm::mat3 mvortho) -> bool
 }
 
 
-auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
+auto mona::axes3::draw(mona::rect vp) const -> void
 {
-    t.begin_frame();
-
-    auto vp = t.area();
     auto perspective_proj =  glm::perspective(glm::radians(45.0f), vp.w/vp.h, 0.1f, 100.0f);
 
-    auto mvporth = orthogonal_proj * cam.view();
-    auto mvpersp = perspective_proj * cam.view();
+    auto mvporth = orthogonal_proj * glm::mat4(1.f);
+    auto mvpersp = perspective_proj * glm::mat4(1.f);
     auto visible_bottom = draw_grid(bottom, mvpersp, mvporth);
     auto visible_up     = draw_grid(up, mvpersp, mvporth);
     auto visible_left   = draw_grid(left, mvpersp, mvporth);
@@ -129,7 +126,6 @@ auto mona::axes3::draw(const camera& cam, mona::targets::target& t) -> void
     linspace(trenderer, y1, y2, y.x, y.y, n, font_origin_y, mvpersp, vp);
     linspace(trenderer, z1, z2, z.x, z.y, n, font_origin_z, mvpersp, vp);
 
-    t.end_frame();
     meshes.clear();
 }
 
