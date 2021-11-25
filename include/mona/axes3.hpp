@@ -32,7 +32,7 @@ namespace mona
         mutable line_grid front;
         mutable line_grid back;
 
-        mutable std::vector<mona::surface_mesh> meshes;
+        mutable std::vector<const mona::surface_mesh*> meshes;
         mutable mona::camera_control cam_control;
     public:
 

@@ -3,6 +3,7 @@
 #include "mona/camera.hpp"
 #include "mona/targets/target.hpp"
 #include "mona/internal/shader.hpp"
+#include "mona/resource.hpp"
 
 #include <armadillo>
 #include <glm/vec3.hpp>
@@ -11,7 +12,7 @@
 
 namespace mona
 {
-    class surface_mesh
+    class surface_mesh: public resource
     {
         mutable shader s;
         unsigned int vao = 0;

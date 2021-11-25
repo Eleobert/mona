@@ -122,7 +122,8 @@ auto mona::axes3::draw(mona::rect vp) const -> void
 
     for(auto& mesh: meshes)
     {
-        mesh.draw(mvpersp);
+        mesh->draw(mvpersp);
+        mesh->release();
     }
 
     trenderer.s.set_uniform("projection", ortho);
@@ -135,7 +136,8 @@ auto mona::axes3::draw(mona::rect vp) const -> void
 
 auto mona::axes3::submit(const mona::surface_mesh& mesh) -> void
 {
-    meshes.push_back(mesh);
+    mesh.hold();
+    meshes.push_back(&mesh);
 }
 
 
