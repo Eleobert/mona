@@ -4,12 +4,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <tuple>
+#include <iostream>
 
 namespace mona
 {
     class camera
     {
-        float distance = 5.f, pitch = 0, yaw = 90.f;
+        float distance = 5.f, pitch = 45.f, yaw = 45.f;
 
     public:
 
