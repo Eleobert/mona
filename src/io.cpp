@@ -25,15 +25,18 @@ auto get_mouse_pos(GLFWwindow* window) -> glm::vec2
     static auto initialized = false;
     static glm::vec2 mouse_pos;
 
+    int w, h;
+    glfwGetWindowSize(window, &w, &h);
+
     if(initialized == false)
     {
         glfwSetCursorPosCallback(window, [](GLFWwindow* window, double x, double y)
         {
-        mouse_pos.x = x;
-        mouse_pos.y = y;
+            mouse_pos.x = x;
+            mouse_pos.y = y;
         });
 
         initialized = true;
     }
-    return mouse_pos;
+    return glm::vec2(mouse_pos.x, static_cast<float>(h) - mouse_pos.y);
 }

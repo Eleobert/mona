@@ -59,7 +59,7 @@ auto mona::axes3::draw(mona::rect vp) const -> void
 {
     auto c = cam_control(vp);
     cam.zoom(c.zoom);
-    cam.rotate(c.yaw, c.pitch);
+    cam.rotate(c.yaw, -c.pitch);
 
     auto perspective_proj =  glm::perspective(glm::radians(45.0f), vp.w/vp.h, 0.1f, 100.0f);
 
