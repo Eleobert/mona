@@ -121,7 +121,7 @@ auto window::submit(const mona::source& src) -> void
     this->src = mona::exchange(&src, this->src);
 }
 
-auto window::get_camera_control() -> camera_control
+auto window::get_camera_control() -> camera_input_control
 {
-    return camera_control(handle);
+    return camera_input_control(handle);
 }

@@ -2,10 +2,6 @@
 
 #include "mona/rect.hpp"
 
-#include <GLFW/glfw3.h>
-#include <glm/vec2.hpp>
-
-
 namespace mona
 {
     class camera_control
@@ -17,17 +13,7 @@ namespace mona
             float yaw   = 0.f;
             float pitch = 0.f;
         };
-        camera_control() = default;
-        camera_control(GLFWwindow* handle)
-        {
-            this->handle = handle;
-        }
-        auto operator()(mona::rect area) -> control;
 
-    private:
-        GLFWwindow* handle = nullptr;
-        float zoom_sens = 0.08;
-        float mov_sens = 0.08;
-        glm::vec2 mouse_pos;
+        virtual auto operator()(mona::rect area) -> control = 0;
     };
 }

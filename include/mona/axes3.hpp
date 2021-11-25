@@ -6,12 +6,13 @@
 #include "mona/camera.hpp"
 #include "mona/targets/target.hpp"
 #include "mona//surface_mesh.hpp"
-#include <mona/camera_control.hpp>
+#include <mona/camera_input_control.hpp>
 
 #include <glm/vec4.hpp>
 #include <glm/vec3.hpp>
 
 #include <vector>
+#include <memory>
 
 
 namespace mona
@@ -33,7 +34,7 @@ namespace mona
         mutable line_grid back;
 
         mutable std::vector<const mona::surface_mesh*> meshes;
-        mutable mona::camera_control cam_control;
+        mutable std::unique_ptr<mona::camera_control> cam_control = nullptr;
     public:
 
         mutable text_renderer trenderer;
@@ -41,6 +42,11 @@ namespace mona
         axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n);
         auto draw(mona::rect area) const -> void;
         auto submit(const mona::surface_mesh& mesh) -> void;
-        auto set_camera_control(const camera_control& control) -> void;
+
+        template<typename Control>
+        auto set_camera_control(const Control& control)
+        {
+            cam_control = std::make_unique<Control>(control);
+        }
     };
 }

@@ -1,8 +1,8 @@
-#include <mona/camera_control.hpp>
+#include <mona/camera_input_control.hpp>
 #include "io.hpp"
 #include <iostream>
 
-auto mona::camera_control::operator()(mona::rect area) -> camera_control::control
+auto mona::camera_input_control::operator()(mona::rect area) -> camera_input_control::control
 {
 
 //    if(not handle) // not good

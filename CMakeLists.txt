@@ -28,7 +28,8 @@ add_library(mona SHARED
         src/line_renderer.cpp include/mona/axes.hpp src/axes.cpp src/line.cpp
         include/mona/dots.hpp
         src/dots.cpp src/target/viewport.cpp include/mona/source.hpp
-        src/camera_control.cpp include/mona/camera_control.hpp)
+        src/camera_input_control.cpp include/mona/camera_input_control.hpp
+        include/mona/camera_control.hpp include/mona/camera_rotation_control.hpp)
 
 target_compile_definitions(mona PUBLIC ARMA_DONT_USE_HDF5)
 target_compile_features(mona PRIVATE cxx_std_20)

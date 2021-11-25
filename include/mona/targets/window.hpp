@@ -3,7 +3,7 @@
 #include "target.hpp"
 #include "mona/colors.hpp"
 #include <mona/source.hpp>
-#include <mona/camera_control.hpp>
+#include <mona/camera_input_control.hpp>
 
 #include <string>
 #include <glm/vec2.hpp>
@@ -29,7 +29,7 @@ namespace mona::targets
 
         window(params p = params());
         ~window();
-        auto get_camera_control() -> camera_control;
+        auto get_camera_control() -> camera_input_control;
         auto active() -> bool override;
         auto begin_frame() -> void override;
         auto end_frame() -> void override;
