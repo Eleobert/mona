@@ -16,7 +16,6 @@ add_library(mona SHARED
         include/mona/internal/grid.hpp
         include/mona/internal/text_renderer.hpp
         include/mona/line.hpp
-        src/plot/surface.cpp
         src/target/window.cpp
         src/slam/slam.cpp
         src/slam/slam.h
