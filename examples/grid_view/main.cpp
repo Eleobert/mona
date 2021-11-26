@@ -6,7 +6,7 @@
 #include <mona/colors.hpp>
 #include <mona/grid.hpp>
 #include <mona/surface_mesh.hpp>
-#include <mona/camera_rotation_control.hpp>
+#include <mona/camera_steady_control.hpp>
 
 #include <armadillo>
 
@@ -91,7 +91,7 @@ int main()
     axes_surf1.set_camera_control(win.get_camera_control());
 
     auto axes_surf2 = mona::axes3({-4, 4}, {-4, 4}, {-4, 4}, 5);
-    axes_surf2.set_camera_control(mona::camera_rotation_control(0.2f, 0.f));
+    axes_surf2.set_camera_control(mona::camera_steady_control(0.2f, 0.f));
 
     auto dots = get_dots();
     auto line = get_line();

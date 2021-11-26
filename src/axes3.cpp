@@ -1,5 +1,5 @@
 #include "mona/axes3.hpp"
-#include <mona/camera_rotation_control.hpp>
+#include <mona/camera_steady_control.hpp>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -36,7 +36,7 @@ mona::axes3::axes3(glm::vec2 x, glm::vec2 y, glm::vec2 z, int n): x(x), y(y), z(
     back   = line_grid({-1, -1, 1}, {-1, 1, 1}, {1, -1, 1}, {1, 1, 1}, n);
 
     orthogonal_proj = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
-    set_camera_control(mona::camera_rotation_control(0.0f, 0.f));
+    set_camera_control(mona::camera_steady_control(0.0f, 0.f));
 }
 
 auto draw_grid(line_grid& g, glm::mat4 mvpersp, glm::mat3 mvortho) -> bool
