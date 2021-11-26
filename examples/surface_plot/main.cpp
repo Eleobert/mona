@@ -1,10 +1,10 @@
 #include <armadillo>
 
 #include <mona/utility.hpp>
-#include <mona/plot/surface.hpp>
 #include <mona/targets/window.hpp>
 #include <mona/surface_mesh.hpp>
 #include <mona/axes3.hpp>
+
 
 auto f(double x, double y)
 {

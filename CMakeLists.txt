@@ -12,7 +12,6 @@ find_package(Freetype REQUIRED)
 add_subdirectory(examples)
 
 add_library(mona SHARED
-        include/mona/plot/surface.hpp
         include/mona/internal/grid.hpp
         include/mona/internal/text_renderer.hpp
         include/mona/line.hpp
