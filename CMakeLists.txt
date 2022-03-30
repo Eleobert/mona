@@ -35,4 +35,4 @@ add_library(mona SHARED
 target_compile_definitions(mona PUBLIC ARMA_DONT_USE_HDF5)
 target_compile_features(mona PRIVATE cxx_std_20)
 target_include_directories(mona PUBLIC include)
-target_link_libraries(mona dl glfw Freetype::Freetype glm::glm)
+target_link_libraries(mona PRIVATE dl Freetype::Freetype PUBLIC glm::glm glfw armadillo::armadillo)
